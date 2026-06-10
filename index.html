@@ -654,7 +654,7 @@
                 </div>
 
                 <button type="submit" class="btn-primary w-full py-4 text-lg shadow-lg shadow-blue-500/30">
-                    <i class="fab fa-whatsapp mr-2 text-2xl"></i>ORDER 
+                    ORDER 
                 </button>
             </form>
         </div>
@@ -807,6 +807,70 @@
             }
         };
 
+        // TAMBAH INI: Map Link Lynk.id lu - Ganti pulzzstore dgn username lu
+        const LYNK_PRODUCT_MAP = {
+            'follower-ig': {
+                100: 'https://lynk.id/pulzzstore/follower-ig-100',
+                200: 'https://lynk.id/pulzzstore/follower-ig-200',
+                300: 'https://lynk.id/pulzzstore/follower-ig-300',
+                400: 'https://lynk.id/pulzzstore/follower-ig-400',
+                500: 'https://lynk.id/pulzzstore/follower-ig-500',
+                600: 'https://lynk.id/pulzzstore/follower-ig-600',
+                700: 'https://lynk.id/pulzzstore/follower-ig-700',
+                800: 'https://lynk.id/pulzzstore/follower-ig-800',
+                900: 'https://lynk.id/pulzzstore/follower-ig-900',
+                1000: 'https://lynk.id/pulzzstore/follower-ig-1000'
+            },
+            'follower-ig-indo': {
+                100: 'https://lynk.id/pulzzstore/follower-ig-indo-100',
+                200: 'https://lynk.id/pulzzstore/follower-ig-indo-200',
+                300: 'https://lynk.id/pulzzstore/follower-ig-indo-300',
+                400: 'https://lynk.id/pulzzstore/follower-ig-indo-400',
+                500: 'https://lynk.id/pulzzstore/follower-ig-indo-500',
+                600: 'https://lynk.id/pulzzstore/follower-ig-indo-600',
+                700: 'https://lynk.id/pulzzstore/follower-ig-indo-700',
+                800: 'https://lynk.id/pulzzstore/follower-ig-indo-800',
+                900: 'https://lynk.id/pulzzstore/follower-ig-indo-900',
+                1000: 'https://lynk.id/pulzzstore/follower-ig-indo-1000'
+            },
+            'like-ig': {
+                200: 'https://lynk.id/pulzzstore/like-ig-200',
+                300: 'https://lynk.id/pulzzstore/like-ig-300',
+                400: 'https://lynk.id/pulzzstore/like-ig-400',
+                500: 'https://lynk.id/pulzzstore/like-ig-500',
+                600: 'https://lynk.id/pulzzstore/like-ig-600',
+                700: 'https://lynk.id/pulzzstore/like-ig-700',
+                800: 'https://lynk.id/pulzzstore/like-ig-800',
+                900: 'https://lynk.id/pulzzstore/like-ig-900',
+                1000: 'https://lynk.id/pulzzstore/like-ig-1000',
+                1200: 'https://lynk.id/pulzzstore/like-ig-1200'
+            },
+            'view-ig': {
+                5000: 'https://lynk.id/pulzzstore/view-ig-5000',
+                6500: 'https://lynk.id/pulzzstore/view-ig-6500',
+                8000: 'https://lynk.id/pulzzstore/view-ig-8000',
+                9500: 'https://lynk.id/pulzzstore/view-ig-9500',
+                11000: 'https://lynk.id/pulzzstore/view-ig-11000',
+                12500: 'https://lynk.id/pulzzstore/view-ig-12500',
+                14000: 'https://lynk.id/pulzzstore/view-ig-14000',
+                15500: 'https://lynk.id/pulzzstore/view-ig-15500',
+                17000: 'https://lynk.id/pulzzstore/view-ig-17000',
+                20000: 'https://lynk.id/pulzzstore/view-ig-20000'
+            },
+            'pengikut-channel': {
+                100: 'https://lynk.id/pulzzstore/pengikut-channel-100',
+                200: 'https://lynk.id/pulzzstore/pengikut-channel-200',
+                300: 'https://lynk.id/pulzzstore/pengikut-channel-300',
+                400: 'https://lynk.id/pulzzstore/pengikut-channel-400',
+                500: 'https://lynk.id/pulzzstore/pengikut-channel-500',
+                600: 'https://lynk.id/pulzzstore/pengikut-channel-600',
+                700: 'https://lynk.id/pulzzstore/pengikut-channel-700',
+                800: 'https://lynk.id/pulzzstore/pengikut-channel-800',
+                900: 'https://lynk.id/pulzzstore/pengikut-channel-900',
+                1000: 'https://lynk.id/pulzzstore/pengikut-channel-1000'
+            }
+        };
+
         let appData = [];
         let currentFilter = 'All';
         let isAdmin = false;
@@ -884,7 +948,7 @@
             }
             const targetEl = document.getElementById('view-' + viewId);
             if(!targetEl) return; // Kalo ID gak ada, diem aja biar gak blank
-            
+
             document.querySelectorAll('.page-view').forEach(el => el.classList.remove('active'));
             targetEl.classList.add('active');
             window.scrollTo(0, 0);
@@ -1051,23 +1115,33 @@
             document.getElementById('smm-total').innerText = `Rp ${harga.toLocaleString('id-ID')}`;
         }
 
+        // GANTI INI: Fungsi order SMM sekarang lempar ke Lynk.id, bukan WA
         window.processSmmOrder = function(e) {
             e.preventDefault();
             const layananKey = document.getElementById('smm-layanan').value;
-            const layanan = SMM_PRICE_LIST[layananKey].name;
-            const target = document.getElementById('smm-target').value;
-            const qty = document.getElementById('smm-qty').value;
-            const total = document.getElementById('smm-total').innerText;
+            const target = document.getElementById('smm-target').value.trim();
+            const qty = parseInt(document.getElementById('smm-qty').value);
             const bayar = document.getElementById('smm-bayar').value;
 
-            if(!target ||!qty) { alert("Link/Username Target & Jumlah wajib diisi"); return; }
+            if(!target ||!qty ||!bayar) {
+                alert("Lengkapi semua data dulu Cok: Target, Jumlah, Pembayaran");
+                return;
+            }
 
-            const message = `Halo Admin PulzzStore!\nSaya mau order Suntik Sosmed:\n\n*Layanan:* ${layanan}\n*Target:* ${target}\n*Jumlah:* ${parseInt(qty).toLocaleString('id-ID')}\n*Total:* ${total}\n*Bayar via:* ${bayar}\n\nMohon diproses min!`;
-            window.open(`https://wa.me/${ADMIN_WA}?text=${encodeURIComponent(message)}`, '_blank');
+            // Ambil link dari LYNK_PRODUCT_MAP
+            const lynkUrl = LYNK_PRODUCT_MAP[layananKey]?.[qty];
+
+            if (!lynkUrl || lynkUrl === '#') {
+                alert('Link produk untuk ' + SMM_PRICE_LIST[layananKey].name + ' qty ' + qty + ' belum disetting. Cek LYNK_PRODUCT_MAP');
+                return;
+            }
+
+            // Langsung buka link Lynk di tab baru
+            window.open(lynkUrl, '_blank');
         }
 
         document.addEventListener('DOMContentLoaded', initApp);
         navigateTo('view-landing');
-    </script>  
+    </script>
 </body>
 </html>
