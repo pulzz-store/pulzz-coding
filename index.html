@@ -562,7 +562,28 @@
                 </button>
             </div>
         </div>
-    </nav>
+        </nav>
+
+    <!-- TAMBAHIN WRAPPER INI BIAR RAPAT -->
+    <main class="pt-2"> <!-- pt-2 = jarak 8px dari navbar, udah mefet -->
+
+        <!-- TAMBAHIN PAGE DEFAULT AKTIF BIAR GAK KOSONG -->
+        <div id="landing" class="page-view active" style="display:block; opacity:1;">
+            <div class="max-w-7xl mx-auto px-4 py-4">
+                <!-- Isi Katalog Akun Game Premium lu taro di sini -->
+                <!-- Contoh: -->
+                <div class="card-premium p-5 mb-3">
+                    <h2 class="text-xl font-bold text-white">Katalog Akun Game</h2>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page lain lu taro di bawah ini -->
+        <div id="catalog" class="page-view">
+           ...
+        </div>
+
+    </main> <!-- TUTUP WRAPPER -->
 
     <!-- LOGIN MODAL -->
     <div id="login-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4">
