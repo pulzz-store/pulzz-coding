@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nama Brand Anda - SMM Panel & Free Fire Account Marketplace</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #00d4ff;
+            --primary-dark: #0099cc;
+            --secondary: #ff006e;
+            --secondary-dark: #cc0055;
+            --dark-bg: #0a0e27;
+            --darker-bg: #050812;
+            --card-bg: #1a1f3a;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0b0;
+            --border-color: #2a2f4a;
+            --success: #00ff88;
+            --warning: #ffaa00;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--darker-bg) 0%, var(--dark-bg) 100%);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Header & Navigation */
+        header {
+            background: rgba(10, 14, 39, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0, 212, 255, 0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background: var(--primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .login-btn {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: var(--dark-bg);
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+        }
+
+        .login-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 30px rgba(0, 212, 255, 0.6);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 6rem 5%;
+            text-align: center;
+            max-width: 1400px;
+            margin: 0 auto;
+            min-height: 70vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .hero h1 span {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 2.5rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            border: none;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: var(--dark-bg);
+            box-shadow: 0 0 30px rgba(0, 212, 255, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 50px rgba(0, 212, 255, 0.8);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--secondary-dark) 100%);
+            color: white;
+            box-shadow: 0 0 30px rgba(255, 0, 110, 0.4);
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 50px rgba(255, 0, 110, 0.8);
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            transition: left 0.4s ease;
+            z-index: -1;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        /* SMM Services Section */
+        .smm-section {
+            padding: 5rem 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(26, 31, 58, 0.3);
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+
+        .section-title span {
+            color: var(--primary);
+        }
+
+        .smm-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .service-card {
+            background: linear-gradient(135deg, var(--card-bg) 0%, rgba(26, 31, 58, 0.5) 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.4s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0, 212, 255, 0.1) 0%, transparent 70%);
+            transition: all 0.4s ease;
+            opacity: 0;
+        }
+
+        .service-card:hover::before {
+            opacity: 1;
+            top: -25%;
+            left: -25%;
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary);
+            box-shadow: 0 20px 50px rgba(0, 212, 255, 0.2);
+        }
+
+        .service-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+
+        .service-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .service-card p {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        .service-card .btn {
+            width: 100%;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Free Fire Section */
+        .ff-section {
+            padding: 5rem 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .ff-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .ff-card {
+            background: linear-gradient(135deg, var(--card-bg) 0%, rgba(26, 31, 58, 0.5) 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            cursor: pointer;
+        }
+
+        .ff-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--secondary);
+            box-shadow: 0 20px 50px rgba(255, 0, 110, 0.2);
+        }
+
+        .ff-image {
+            width: 100%;
+            height: 250px;
+            background: linear-gradient(135deg, #1a3a52 0%, #2d5a6f 100%);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+        }
+
+        .ff-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .ff-card-content {
+            padding: 1.5rem;
+        }
+
+        .ff-level {
+            display: inline-block;
+            background: var(--primary);
+            color: var(--dark-bg);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+        }
+
+        .ff-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .ff-skins {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .ff-price {
+            font-size: 1.5rem;
+            color: var(--success);
+            font-weight: 900;
+            margin-bottom: 1rem;
+        }
+
+        .ff-card .btn {
+            width: 100%;
+        }
+
+        /* Trust Section */
+        .trust-section {
+            padding: 5rem 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(26, 31, 58, 0.3);
+        }
+
+        .trust-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .trust-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .stat-item {
+            background: linear-gradient(135deg, var(--card-bg) 0%, rgba(26, 31, 58, 0.5) 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-item:hover {
+            border-color: var(--primary);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.15);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .payment-methods {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .payment-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .payment-logos {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .payment-logo {
+            background: linear-gradient(135deg, var(--card-bg) 0%, rgba(26, 31, 58, 0.5) 100%);
+            border: 1px solid var(--border-color);
+            width: 70px;
+            height: 70px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .payment-logo:hover {
+            border-color: var(--primary);
+            box-shadow: 0 5px 20px rgba(0, 212, 255, 0.2);
+            transform: translateY(-3px);
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(5, 8, 18, 0.9);
+            border-top: 1px solid var(--border-color);
+            padding: 3rem 5%;
+            margin-top: 5rem;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.7rem;
+        }
+
+        .footer-section a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: var(--primary);
+            margin-left: 5px;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid var(--border-color);
+            padding-top: 2rem;
+            text-align: center;
+            color: var(--text-secondary);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem 3%;
+            }
+
+            .nav-links {
+                gap: 1rem;
+                font-size: 0.9rem;
+            }
+
+            .logo {
+                font-size: 1.4rem;
+            }
+
+            .hero {
+                padding: 3rem 3%;
+                min-height: 50vh;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .hero-buttons .btn {
+                width: 100%;
+            }
+
+            .section-title {
+                font-size: 1.8rem;
+            }
+
+            .trust-content {
+                grid-template-columns: 1fr;
+            }
+
+            .smm-grid,
+            .ff-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .service-card,
+            .ff-card {
+                margin: 0 auto;
+                width: 100%;
+            }
+        }
+
+        /* Animations */
+        @keyframes glow {
+            0%, 100% {
+                text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+            }
+            50% {
+                text-shadow: 0 0 20px rgba(0, 212, 255, 0.8);
+            }
+        }
+
+        .animate-glow {
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        /* Smooth Scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Scroll to Top Button */
+        .scroll-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            border-radius: 50%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 999;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
+        }
+
+        .scroll-to-top:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 30px rgba(0, 212, 255, 0.8);
+        }
+
+        .scroll-to-top.show {
+            display: flex;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header & Navigation -->
+    <header>
+        <nav>
+            <a href="#home" class="logo">Nama Brand Anda</a>
+            <ul class="nav-links">
+                <li><a href="#smm">SMM</a></li>
+                <li><a href="#ff">Free Fire</a></li>
+                <li><a href="#trust">Trust</a></li>
+                <li><button class="login-btn">Login</button></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-badge">
+            🚀 Platform Terpercaya #1 di Indonesia
+        </div>
+        <h1>
+            Tingkatkan Presensmu <span>Sekarang Juga</span>
+        </h1>
+        <p>
+            Dapatkan Followers Instagram, Likes TikTok, Subscribers YouTube dan Account Free Fire Terbaik dengan Harga Terjangkau. Aman, Cepat, Terpercaya.
+        </p>
+        <div class="hero-buttons">
+            <button class="btn btn-primary" onclick="document.getElementById('smm').scrollIntoView();">🎯 Cek Layanan SMM</button>
+            <button class="btn btn-secondary" onclick="document.getElementById('ff').scrollIntoView();">⚔️ Cari Akun FF</button>
+        </div>
+    </section>
+
+    <!-- SMM Services Section -->
+    <section class="smm-section" id="smm">
+        <h2 class="section-title">Layanan <span>SMM Panel</span></h2>
+        <div class="smm-grid">
+            <!-- Instagram Card -->
+            <div class="service-card">
+                <div class="service-icon">📱</div>
+                <h3>Instagram Growth</h3>
+                <p>Tingkatkan followers dan likes Instagram Anda dengan cepat dan aman. Real engagement dari akun aktif.</p>
+                <button class="btn btn-primary">Beli Followers</button>
+                <button class="btn btn-secondary">Beli Likes</button>
+            </div>
+
+            <!-- TikTok Card -->
+            <div class="service-card">
+                <div class="service-icon">🎵</div>
+                <h3>TikTok Boost</h3>
+                <p>Dapatkan views, likes, dan followers TikTok instan. Tingkatkan viral rate konten Anda sekarang.</p>
+                <button class="btn btn-primary">Beli Views</button>
+                <button class="btn btn-secondary">Beli Likes</button>
+            </div>
+
+            <!-- YouTube Card -->
+            <div class="service-card">
+                <div class="service-icon">▶️</div>
+                <h3>YouTube Mastery</h3>
+                <p>Perkuat channel YouTube dengan subscribers dan views asli. Sempurna untuk monetisasi cepat.</p>
+                <button class="btn btn-primary">Beli Subscribers</button>
+                <button class="btn btn-secondary">Beli Views</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Free Fire Accounts Section -->
+    <section class="ff-section" id="ff">
+        <h2 class="section-title">Toko <span>Free Fire</span> Kami</h2>
+        <div class="ff-grid">
+            <!-- Account 1 -->
+            <div class="ff-card">
+                <div class="ff-image">
+                    🎮
+                </div>
+                <div class="ff-card-content">
+                    <span class="ff-level">Level 47</span>
+                    <h3>Elite Guardian</h3>
+                    <p class="ff-skins">📦 25 Skins Terbaik</p>
+                    <div class="ff-price">Rp 450.000</div>
+                    <button class="btn btn-secondary">Detail Akun</button>
+                </div>
+            </div>
+
+            <!-- Account 2 -->
+            <div class="ff-card">
+                <div class="ff-image">
+                    ⚡
+                </div>
+                <div class="ff-card-content">
+                    <span class="ff-level">Level 52</span>
+                    <h3>Pro Hunter</h3>
+                    <p class="ff-skins">📦 38 Skins Eksklusif</p>
+                    <div class="ff-price">Rp 680.000</div>
+                    <button class="btn btn-secondary">Detail Akun</button>
+                </div>
+            </div>
+
+            <!-- Account 3 -->
+            <div class="ff-card">
+                <div class="ff-image">
+                    🏆
+                </div>
+                <div class="ff-card-content">
+                    <span class="ff-level">Level 55</span>
+                    <h3>Legends Warrior</h3>
+                    <p class="ff-skins">📦 52 Skins + Pet Premium</p>
+                    <div class="ff-price">Rp 950.000</div>
+                    <button class="btn btn-secondary">Detail Akun</button>
+                </div>
+            </div>
+
+            <!-- Account 4 -->
+            <div class="ff-card">
+                <div class="ff-image">
+                    👑
+                </div>
+                <div class="ff-card-content">
+                    <span class="ff-level">Level 58</span>
+                    <h3>Ultimate Champion</h3>
+                    <p class="ff-skins">📦 60+ Skins Legendary</p>
+                    <div class="ff-price">Rp 1.200.000</div>
+                    <button class="btn btn-secondary">Detail Akun</button>
+                </div>
+            </div>
+
+            <!-- Account 5 -->
+            <div class="ff-card">
+                <div class="ff-image">
+                    🌟
+                </div>
+                <div class="ff-card-content">
+                    <span class="ff-level">Level 50</span>
+                    <h3>Cyber Assassin</h3>
+                    <p class="ff-skins">📦 32 Skins Rare</p>
+                    <div class="ff-price">Rp 580.000</div>
+                    <button class="btn btn-secondary">Detail Akun</button>
+                </div>
+            </div>
+
+            <!-- Account 6 -->
+            <div class="ff-card">
+                <div class="ff-image">
+                    💎
+                </div>
+                <div class="ff-card-content">
+                    <span class="ff-level">Level 60</span>
+                    <h3>Diamond Supreme</h3>
+                    <p class="ff-skins">📦 75 Skins All Tier</p>
+                    <div class="ff-price">Rp 1.500.000</div>
+                    <button class="btn btn-secondary">Detail Akun</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trust Section -->
+    <section class="trust-section" id="trust">
+        <h2 class="section-title">Mengapa <span>Kami?</span></h2>
+        <div class="trust-content">
+            <div class="trust-stats">
+                <div class="stat-item">
+                    <div class="stat-number">50K+</div>
+                    <div class="stat-label">Transaksi Selesai</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">15K+</div>
+                    <div class="stat-label">Pengguna Aktif</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">99.8%</div>
+                    <div class="stat-label">Kepuasan Pelanggan</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">24/7</div>
+                    <div class="stat-label">Support Responsif</div>
+                </div>
+            </div>
+
+            <div class="payment-methods">
+                <h3 class="payment-title">💳 Metode Pembayaran Kami</h3>
+                <div class="payment-logos">
+                    <div class="payment-logo">GCash</div>
+                    <div class="payment-logo">Dana</div>
+                    <div class="payment-logo">OVO</div>
+                    <div class="payment-logo">QRIS</div>
+                    <div class="payment-logo">Bank</div>
+                    <div class="payment-logo">Crypto</div>
+                </div>
+                <p style="color: var(--text-secondary); margin-top: 1rem;">
+                    Semua transaksi dilindungi dengan enkripsi tingkat bank. Data Anda 100% aman bersama kami.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Tentang Kami</h3>
+                <ul>
+                    <li><a href="#home">Beranda</a></li>
+                    <li><a href="#smm">Layanan SMM</a></li>
+                    <li><a href="#ff">Akun Free Fire</a></li>
+                    <li><a href="#trust">Kepercayaan</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Layanan</h3>
+                <ul>
+                    <li><a href="#">Instagram Growth</a></li>
+                    <li><a href="#">TikTok Boost</a></li>
+                    <li><a href="#">YouTube Mastery</a></li>
+                    <li><a href="#">FF Marketplace</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Legal</h3>
+                <ul>
+                    <li><a href="#">Kebijakan Privasi</a></li>
+                    <li><a href="#">Syarat & Ketentuan</a></li>
+                    <li><a href="#">Kebijakan Pengembalian</a></li>
+                    <li><a href="#">Hubungi Kami</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Kontak</h3>
+                <ul>
+                    <li><a href="mailto:support@namabrandu.com">📧 support@namabrandu.com</a></li>
+                    <li><a href="https://wa.me/6281234567890">📱 WhatsApp Support</a></li>
+                    <li><a href="#">🕐 Jam Operasional: 24/7</a></li>
+                    <li><a href="#">📍 Indonesia</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024-2025 Nama Brand Anda. Semua Hak Dilindungi. | Platform Jual Beli SMM & Account FF Terpercaya</p>
+        </div>
+    </footer>
+
+    <!-- Scroll to Top Button -->
+    <div class="scroll-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'});">↑</div>
+
+    <script>
+        // Show/hide scroll to top button
+        window.addEventListener('scroll', function() {
+            const scrollToTop = document.querySelector('.scroll-to-top');
+            if (window.pageYOffset > 300) {
+                scrollToTop.classList.add('show');
+            } else {
+                scrollToTop.classList.remove('show');
+            }
+        });
+
+        // Smooth scroll for buttons
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Button click animations
+        document.querySelectorAll('.btn').forEach(button => {
+            button.addEventListener('click', function() {
+                console.log('Button clicked:', this.textContent);
+                // Add your action here (redirect to checkout, open modal, etc)
+            });
+        });
+
+        // Add hover effects to service cards
+        document.querySelectorAll('.service-card, .ff-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transition = 'all 0.4s ease';
+            });
+        });
+    </script>
+</body>
+</html>
