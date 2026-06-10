@@ -882,9 +882,13 @@
                 openLoginModal();
                 return;
             }
+            const targetEl = document.getElementById('view-' + viewId);
+            if(!targetEl) return; // Kalo ID gak ada, diem aja biar gak blank
+            
             document.querySelectorAll('.page-view').forEach(el => el.classList.remove('active'));
-            document.getElementById('view-' + viewId).classList.add('active');
+            targetEl.classList.add('active');
             window.scrollTo(0, 0);
+
             if(viewId === 'home') renderCatalog();
             if(viewId === 'admin' && isAdmin) renderAdminList();
             if(viewId === 'smm') {
@@ -1063,7 +1067,7 @@
         }
 
         document.addEventListener('DOMContentLoaded', initApp);
-        navigateTo('landing');
+        navigateTo('view-landing');
     </script>  
 </body>
 </html>
