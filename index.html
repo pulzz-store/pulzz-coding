@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nama Brand Anda - SMM Panel & Free Fire Account Marketplace</title>
+    <title>PULZZ STORE - Elite Gaming & Digital Services Marketplace</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -14,60 +17,71 @@
         :root {
             --primary: #00d4ff;
             --primary-dark: #0099cc;
+            --primary-light: #33e0ff;
             --secondary: #ff006e;
             --secondary-dark: #cc0055;
-            --dark-bg: #0a0e27;
-            --darker-bg: #050812;
-            --card-bg: #1a1f3a;
+            --secondary-light: #ff3385;
+            --dark-bg: #0d0e15;
+            --darker-bg: #05060b;
+            --card-bg: #15171f;
+            --card-hover: #1a1d2e;
             --text-primary: #ffffff;
-            --text-secondary: #a0a0b0;
-            --border-color: #2a2f4a;
+            --text-secondary: #b0b3c1;
+            --border-color: #252a3a;
             --success: #00ff88;
             --warning: #ffaa00;
+            --accent-glow: rgba(0, 212, 255, 0.15);
+        }
+
+        html {
+            scroll-behavior: smooth;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             background: linear-gradient(135deg, var(--darker-bg) 0%, var(--dark-bg) 100%);
+            background-attachment: fixed;
             color: var(--text-primary);
             line-height: 1.6;
             overflow-x: hidden;
         }
 
-        /* Header & Navigation */
+        /* ============= HEADER & NAVIGATION ============= */
         header {
-            background: rgba(10, 14, 39, 0.95);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--border-color);
+            background: rgba(13, 14, 21, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(0, 212, 255, 0.1);
             position: sticky;
             top: 0;
             z-index: 1000;
-            box-shadow: 0 4px 20px rgba(0, 212, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 212, 255, 0.08);
         }
 
         nav {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1.5rem 5%;
-            max-width: 1400px;
+            padding: 1.2rem 5%;
+            max-width: 1600px;
             margin: 0 auto;
         }
 
         .logo {
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             font-weight: 900;
+            letter-spacing: -0.5px;
             background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             text-decoration: none;
+            font-family: 'Rajdhani', monospace;
         }
 
         .nav-links {
             display: flex;
             list-style: none;
-            gap: 2rem;
+            gap: 3rem;
             align-items: center;
         }
 
@@ -75,7 +89,8 @@
             color: var(--text-secondary);
             text-decoration: none;
             font-weight: 500;
-            transition: all 0.3s ease;
+            font-size: 0.95rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
         }
 
@@ -88,10 +103,10 @@
             position: absolute;
             width: 0;
             height: 2px;
-            bottom: -5px;
+            bottom: -8px;
             left: 0;
-            background: var(--primary);
-            transition: width 0.3s ease;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .nav-links a:hover::after {
@@ -99,51 +114,89 @@
         }
 
         .login-btn {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: var(--dark-bg);
-            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, var(--primary) 0%, #00a8cc 100%);
+            color: var(--darker-bg);
+            padding: 0.65rem 1.8rem;
             border-radius: 50px;
             border: none;
-            font-weight: 600;
+            font-weight: 700;
+            font-size: 0.9rem;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 0 24px rgba(0, 212, 255, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            letter-spacing: 0.5px;
         }
 
         .login-btn:hover {
             transform: translateY(-3px);
-            box-shadow: 0 0 30px rgba(0, 212, 255, 0.6);
+            box-shadow: 0 8px 32px rgba(0, 212, 255, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
         }
 
-        /* Hero Section */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 6px;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: var(--primary);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        /* ============= HERO SECTION ============= */
         .hero {
-            padding: 6rem 5%;
+            padding: 7rem 5% 6rem;
             text-align: center;
-            max-width: 1400px;
+            max-width: 1600px;
             margin: 0 auto;
-            min-height: 70vh;
+            min-height: 75vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 0%, rgba(0, 212, 255, 0.08) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
         }
 
         .hero-badge {
             display: inline-block;
-            background: rgba(0, 212, 255, 0.1);
-            border: 1px solid var(--primary);
+            background: rgba(0, 212, 255, 0.08);
+            border: 1px solid rgba(0, 212, 255, 0.3);
             color: var(--primary);
-            padding: 0.5rem 1rem;
+            padding: 0.65rem 1.3rem;
             border-radius: 50px;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             font-weight: 600;
             margin-bottom: 2rem;
+            backdrop-filter: blur(8px);
+            letter-spacing: 0.5px;
         }
 
         .hero h1 {
-            font-size: 3.5rem;
+            font-size: 3.8rem;
             font-weight: 900;
-            margin-bottom: 1rem;
-            line-height: 1.2;
+            margin-bottom: 1.2rem;
+            line-height: 1.15;
+            letter-spacing: -1px;
         }
 
         .hero h1 span {
@@ -154,12 +207,14 @@
         }
 
         .hero p {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             color: var(--text-secondary);
-            margin-bottom: 2.5rem;
+            margin-bottom: 3rem;
             max-width: 700px;
             margin-left: auto;
             margin-right: auto;
+            font-weight: 400;
+            line-height: 1.8;
         }
 
         .hero-buttons {
@@ -171,39 +226,45 @@
         }
 
         .btn {
-            padding: 1rem 2rem;
+            padding: 1rem 2.2rem;
             border-radius: 50px;
             border: none;
-            font-weight: 600;
-            font-size: 1rem;
+            font-weight: 700;
+            font-size: 0.95rem;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             text-decoration: none;
             display: inline-block;
             position: relative;
             overflow: hidden;
+            letter-spacing: 0.5px;
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: var(--dark-bg);
-            box-shadow: 0 0 30px rgba(0, 212, 255, 0.4);
+            background: linear-gradient(135deg, var(--primary) 0%, #00a8cc 100%);
+            color: var(--darker-bg);
+            box-shadow: 0 0 30px rgba(0, 212, 255, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
         }
 
         .btn-primary:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 0 50px rgba(0, 212, 255, 0.8);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 48px rgba(0, 212, 255, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.3);
         }
 
         .btn-secondary {
-            background: linear-gradient(135deg, var(--secondary) 0%, var(--secondary-dark) 100%);
+            background: linear-gradient(135deg, var(--secondary) 0%, #cc0055 100%);
             color: white;
-            box-shadow: 0 0 30px rgba(255, 0, 110, 0.4);
+            box-shadow: 0 0 30px rgba(255, 0, 110, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
         }
 
         .btn-secondary:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 0 50px rgba(255, 0, 110, 0.8);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 48px rgba(255, 0, 110, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-small {
+            padding: 0.6rem 1.3rem;
+            font-size: 0.85rem;
         }
 
         .btn::before {
@@ -213,48 +274,96 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: rgba(255, 255, 255, 0.2);
-            transition: left 0.4s ease;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             z-index: -1;
         }
 
-        .btn:hover::before {
+        .btn:active::before {
             left: 100%;
         }
 
-        /* SMM Services Section */
-        .smm-section {
-            padding: 5rem 5%;
-            max-width: 1400px;
-            margin: 0 auto;
-            background: rgba(26, 31, 58, 0.3);
-        }
-
-        .section-title {
-            font-size: 2.5rem;
-            font-weight: 900;
+        /* ============= FILTER & TABS ============= */
+        .filter-section {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
             margin-bottom: 3rem;
-            text-align: center;
+            flex-wrap: wrap;
         }
 
-        .section-title span {
+        .filter-btn {
+            padding: 0.7rem 1.8rem;
+            border: 2px solid var(--border-color);
+            background: transparent;
+            color: var(--text-secondary);
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 0.9rem;
+        }
+
+        .filter-btn:hover {
+            border-color: var(--primary);
             color: var(--primary);
         }
 
-        .smm-grid {
+        .filter-btn.active {
+            background: linear-gradient(135deg, var(--primary) 0%, #00a8cc 100%);
+            border-color: var(--primary);
+            color: var(--darker-bg);
+            box-shadow: 0 0 24px rgba(0, 212, 255, 0.35);
+        }
+
+        /* ============= SERVICES SECTION ============= */
+        .services-section {
+            padding: 6rem 5%;
+            max-width: 1600px;
+            margin: 0 auto;
+            background: linear-gradient(180deg, rgba(13, 14, 21, 0.5) 0%, rgba(21, 23, 31, 0.3) 100%);
+        }
+
+        .section-title {
+            font-size: 2.8rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            text-align: center;
+            letter-spacing: -0.5px;
+        }
+
+        .section-title span {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+            font-size: 1rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2.5rem;
             margin-top: 3rem;
         }
 
+        /* ============= SERVICE CARDS ============= */
         .service-card {
-            background: linear-gradient(135deg, var(--card-bg) 0%, rgba(26, 31, 58, 0.5) 100%);
-            border: 1px solid var(--border-color);
+            background: linear-gradient(135deg, var(--card-bg) 0%, rgba(21, 23, 31, 0.6) 100%);
+            border: 1.5px solid var(--border-color);
             border-radius: 20px;
             padding: 2rem;
             text-align: center;
-            transition: all 0.4s ease;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
             position: relative;
             overflow: hidden;
@@ -263,148 +372,446 @@
         .service-card::before {
             content: '';
             position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(0, 212, 255, 0.1) 0%, transparent 70%);
-            transition: all 0.4s ease;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(0, 212, 255, 0.1) 0%, transparent 70%);
             opacity: 0;
+            transition: opacity 0.4s ease;
+            pointer-events: none;
+        }
+
+        .service-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 20px;
+            padding: 1.5px;
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.2) 0%, rgba(255, 0, 110, 0.1) 100%);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            pointer-events: none;
+        }
+
+        .service-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--primary);
+            background: linear-gradient(135deg, var(--card-hover) 0%, rgba(21, 23, 31, 0.8) 100%);
+            box-shadow: 0 20px 60px rgba(0, 212, 255, 0.15), 0 0 40px rgba(0, 212, 255, 0.1);
         }
 
         .service-card:hover::before {
             opacity: 1;
-            top: -25%;
-            left: -25%;
         }
 
-        .service-card:hover {
-            transform: translateY(-10px);
-            border-color: var(--primary);
-            box-shadow: 0 20px 50px rgba(0, 212, 255, 0.2);
+        .service-card:hover::after {
+            opacity: 1;
         }
 
         .service-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
+            font-size: 3.2rem;
+            margin-bottom: 1.2rem;
             display: inline-block;
+            transition: transform 0.3s ease;
+        }
+
+        .service-card:hover .service-icon {
+            transform: scale(1.1) rotateY(180deg);
         }
 
         .service-card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            font-weight: 700;
+            font-size: 1.35rem;
+            margin-bottom: 0.8rem;
+            font-weight: 800;
+            letter-spacing: -0.3px;
         }
 
         .service-card p {
             color: var(--text-secondary);
-            margin-bottom: 1.5rem;
-            font-size: 0.95rem;
+            margin-bottom: 1.2rem;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .service-features {
+            background: rgba(0, 212, 255, 0.05);
+            border: 1px solid rgba(0, 212, 255, 0.15);
+            border-radius: 12px;
+            padding: 1.2rem;
+            margin: 1.2rem 0;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .service-features li {
+            list-style: none;
+            margin: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            font-weight: 500;
+        }
+
+        .service-features li:before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .service-price {
+            font-size: 2rem;
+            color: var(--primary);
+            font-weight: 900;
+            margin: 1.2rem 0;
+            font-family: 'Rajdhani', monospace;
+            letter-spacing: 1px;
         }
 
         .service-card .btn {
             width: 100%;
-            margin-bottom: 0.5rem;
+            margin-top: 1rem;
         }
 
-        /* Free Fire Section */
-        .ff-section {
-            padding: 5rem 5%;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .ff-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
-            margin-top: 3rem;
-        }
-
-        .ff-card {
-            background: linear-gradient(135deg, var(--card-bg) 0%, rgba(26, 31, 58, 0.5) 100%);
-            border: 1px solid var(--border-color);
+        /* ============= GAME ACCOUNT CARDS ============= */
+        .game-card {
+            background: linear-gradient(135deg, var(--card-bg) 0%, rgba(21, 23, 31, 0.6) 100%);
+            border: 1.5px solid var(--border-color);
             border-radius: 20px;
             overflow: hidden;
-            transition: all 0.4s ease;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
+            position: relative;
         }
 
-        .ff-card:hover {
-            transform: translateY(-10px);
+        .game-card:hover {
+            transform: translateY(-8px);
             border-color: var(--secondary);
-            box-shadow: 0 20px 50px rgba(255, 0, 110, 0.2);
+            box-shadow: 0 20px 60px rgba(255, 0, 110, 0.15), 0 0 40px rgba(255, 0, 110, 0.1);
         }
 
-        .ff-image {
+        .game-image {
             width: 100%;
-            height: 250px;
+            height: 240px;
             background: linear-gradient(135deg, #1a3a52 0%, #2d5a6f 100%);
             position: relative;
             overflow: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 3rem;
+            font-size: 3.5rem;
         }
 
-        .ff-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+        .game-card-content {
+            padding: 2rem;
         }
 
-        .ff-card-content {
-            padding: 1.5rem;
+        .badges {
+            display: flex;
+            gap: 0.6rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.2rem;
         }
 
-        .ff-level {
+        .badge {
             display: inline-block;
-            background: var(--primary);
-            color: var(--dark-bg);
+            background: linear-gradient(135deg, var(--primary) 0%, #00a8cc 100%);
+            color: var(--darker-bg);
             padding: 0.5rem 1rem;
             border-radius: 50px;
             font-weight: 700;
-            font-size: 0.85rem;
-            margin-bottom: 1rem;
+            font-size: 0.8rem;
+            box-shadow: 0 0 16px rgba(0, 212, 255, 0.25);
+            letter-spacing: 0.3px;
         }
 
-        .ff-card h3 {
-            font-size: 1.3rem;
-            margin-bottom: 0.5rem;
-            font-weight: 700;
+        .badge.secondary {
+            background: linear-gradient(135deg, var(--secondary) 0%, #cc0055 100%);
+            box-shadow: 0 0 16px rgba(255, 0, 110, 0.25);
         }
 
-        .ff-skins {
-            color: var(--text-secondary);
+        .game-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 0.8rem;
+            font-weight: 800;
+            letter-spacing: -0.3px;
+        }
+
+        .specs {
+            background: rgba(0, 212, 255, 0.05);
+            border-left: 3px solid var(--primary);
+            border-radius: 12px;
+            padding: 1.2rem;
+            margin: 1.2rem 0;
             font-size: 0.9rem;
-            margin-bottom: 1rem;
+            color: var(--text-secondary);
         }
 
-        .ff-price {
-            font-size: 1.5rem;
+        .specs li {
+            list-style: none;
+            margin: 0.6rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            font-weight: 500;
+        }
+
+        .specs li:before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        .status {
+            display: inline-block;
+            background: rgba(0, 255, 136, 0.08);
+            border: 1px solid rgba(0, 255, 136, 0.3);
             color: var(--success);
-            font-weight: 900;
-            margin-bottom: 1rem;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin: 0.8rem 0;
         }
 
-        .ff-card .btn {
+        .game-price {
+            font-size: 2.2rem;
+            color: var(--secondary);
+            font-weight: 900;
+            margin: 1.2rem 0;
+            font-family: 'Rajdhani', monospace;
+            letter-spacing: 1px;
+        }
+
+        .game-card .btn {
             width: 100%;
         }
 
-        /* Trust Section */
-        .trust-section {
-            padding: 5rem 5%;
-            max-width: 1400px;
+        /* ============= HOW IT WORKS SECTION ============= */
+        .how-it-works {
+            padding: 6rem 5%;
+            max-width: 1600px;
             margin: 0 auto;
-            background: rgba(26, 31, 58, 0.3);
+            background: linear-gradient(180deg, rgba(21, 23, 31, 0.3) 0%, rgba(13, 14, 21, 0.5) 100%);
+        }
+
+        .timeline {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding: 2rem;
+            background: linear-gradient(135deg, var(--card-bg) 0%, rgba(21, 23, 31, 0.6) 100%);
+            border: 1.5px solid var(--border-color);
+            border-radius: 20px;
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .timeline-item:hover {
+            transform: translateY(-6px);
+            border-color: var(--primary);
+            box-shadow: 0 16px 48px rgba(0, 212, 255, 0.12);
+        }
+
+        .timeline-number {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary) 0%, #00a8cc 100%);
+            color: var(--darker-bg);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 1.8rem;
+            margin: 0 auto 1.5rem;
+            box-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+        }
+
+        .timeline-item h4 {
+            font-size: 1.3rem;
+            margin-bottom: 0.8rem;
+            font-weight: 800;
+        }
+
+        .timeline-item p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* ============= FAQ SECTION ============= */
+        .faq-section {
+            padding: 6rem 5%;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .faq-container {
+            max-width: 800px;
+            margin: 3rem auto 0;
+        }
+
+        .faq-item {
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--card-bg) 0%, rgba(21, 23, 31, 0.6) 100%);
+            border: 1.5px solid var(--border-color);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .faq-item:hover {
+            border-color: var(--primary);
+            box-shadow: 0 8px 32px rgba(0, 212, 255, 0.1);
+        }
+
+        .faq-question {
+            padding: 1.5rem;
+            background: linear-gradient(135deg, var(--card-bg) 0%, rgba(21, 23, 31, 0.4) 100%);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+            font-weight: 700;
+            user-select: none;
+        }
+
+        .faq-question:hover {
+            background: linear-gradient(135deg, var(--card-hover) 0%, rgba(21, 23, 31, 0.6) 100%);
+        }
+
+        .faq-icon {
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        .faq-item.active .faq-icon {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 0 1.5rem;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 300px;
+            padding: 0 1.5rem 1.5rem;
+        }
+
+        .faq-answer p {
+            color: var(--text-secondary);
+            font-weight: 400;
+            line-height: 1.7;
+        }
+
+        /* ============= LIVE TICKER ============= */
+        .ticker-banner {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            background: linear-gradient(135deg, var(--card-bg) 0%, rgba(21, 23, 31, 0.8) 100%);
+            border: 1.5px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.2rem 1.5rem;
+            box-shadow: 0 16px 48px rgba(0, 212, 255, 0.15);
+            max-width: 320px;
+            animation: slideIn 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 100;
+        }
+
+        .ticker-banner.hide {
+            animation: slideOut 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(-400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(-400px);
+                opacity: 0;
+            }
+        }
+
+        .ticker-content {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .ticker-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary) 0%, #00a8cc 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .ticker-text {
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .ticker-user {
+            color: var(--primary);
+        }
+
+        .ticker-action {
+            color: var(--text-secondary);
+        }
+
+        /* ============= TRUST SECTION ============= */
+        .trust-section {
+            padding: 6rem 5%;
+            max-width: 1600px;
+            margin: 0 auto;
+            background: linear-gradient(180deg, rgba(13, 14, 21, 0.5) 0%, rgba(21, 23, 31, 0.3) 100%);
         }
 
         .trust-content {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 4rem;
+            gap: 5rem;
             align-items: center;
+            margin-top: 3rem;
         }
 
         .trust-stats {
@@ -414,29 +821,35 @@
         }
 
         .stat-item {
-            background: linear-gradient(135deg, var(--card-bg) 0%, rgba(26, 31, 58, 0.5) 100%);
-            border: 1px solid var(--border-color);
-            border-radius: 15px;
-            padding: 2rem;
+            background: linear-gradient(135deg, var(--card-bg) 0%, rgba(21, 23, 31, 0.6) 100%);
+            border: 1.5px solid var(--border-color);
+            border-radius: 18px;
+            padding: 2.5rem;
             text-align: center;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .stat-item:hover {
+            transform: translateY(-6px);
             border-color: var(--primary);
-            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.15);
+            box-shadow: 0 16px 48px rgba(0, 212, 255, 0.12);
         }
 
         .stat-number {
-            font-size: 2.5rem;
+            font-size: 2.8rem;
             font-weight: 900;
-            color: var(--primary);
-            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.8rem;
+            font-family: 'Rajdhani', monospace;
         }
 
         .stat-label {
             color: var(--text-secondary);
             font-size: 0.95rem;
+            font-weight: 600;
         }
 
         .payment-methods {
@@ -446,60 +859,66 @@
         }
 
         .payment-title {
-            font-size: 1.3rem;
-            font-weight: 700;
+            font-size: 1.4rem;
+            font-weight: 800;
             margin-bottom: 1rem;
         }
 
         .payment-logos {
-            display: flex;
-            flex-wrap: wrap;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
             gap: 1.5rem;
-            align-items: center;
         }
 
         .payment-logo {
-            background: linear-gradient(135deg, var(--card-bg) 0%, rgba(26, 31, 58, 0.5) 100%);
-            border: 1px solid var(--border-color);
-            width: 70px;
-            height: 70px;
-            border-radius: 15px;
+            background: linear-gradient(135deg, var(--card-bg) 0%, rgba(21, 23, 31, 0.6) 100%);
+            border: 1.5px solid var(--border-color);
+            width: 80px;
+            height: 80px;
+            border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 700;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
+            font-size: 0.75rem;
+            text-align: center;
+            padding: 0.5rem;
         }
 
         .payment-logo:hover {
             border-color: var(--primary);
-            box-shadow: 0 5px 20px rgba(0, 212, 255, 0.2);
-            transform: translateY(-3px);
+            box-shadow: 0 8px 32px rgba(0, 212, 255, 0.2);
+            transform: translateY(-4px);
         }
 
-        /* Footer */
+        /* ============= FOOTER ============= */
         footer {
-            background: rgba(5, 8, 18, 0.9);
-            border-top: 1px solid var(--border-color);
-            padding: 3rem 5%;
-            margin-top: 5rem;
+            background: linear-gradient(180deg, rgba(13, 14, 21, 0.8) 0%, rgba(5, 6, 11, 0.95) 100%);
+            border-top: 1px solid rgba(0, 212, 255, 0.1);
+            padding: 4rem 5% 2rem;
+            margin-top: 6rem;
         }
 
         .footer-content {
-            max-width: 1400px;
+            max-width: 1600px;
             margin: 0 auto;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-bottom: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
         }
 
         .footer-section h3 {
-            font-size: 1.1rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            color: var(--primary);
+            font-size: 1rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 0.5px;
         }
 
         .footer-section ul {
@@ -507,53 +926,124 @@
         }
 
         .footer-section ul li {
-            margin-bottom: 0.7rem;
+            margin-bottom: 0.8rem;
         }
 
         .footer-section a {
             color: var(--text-secondary);
             text-decoration: none;
             transition: all 0.3s ease;
+            font-size: 0.9rem;
+            font-weight: 500;
         }
 
         .footer-section a:hover {
             color: var(--primary);
-            margin-left: 5px;
+            padding-left: 5px;
         }
 
         .footer-bottom {
-            border-top: 1px solid var(--border-color);
+            border-top: 1px solid rgba(0, 212, 255, 0.1);
             padding-top: 2rem;
             text-align: center;
             color: var(--text-secondary);
+            font-size: 0.85rem;
+            max-width: 1600px;
+            margin: 0 auto;
         }
 
-        /* Responsive Design */
+        /* ============= SCROLL TO TOP ============= */
+        .scroll-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 52px;
+            height: 52px;
+            background: linear-gradient(135deg, var(--primary) 0%, #00a8cc 100%);
+            border-radius: 50%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 999;
+            font-size: 1.4rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 8px 32px rgba(0, 212, 255, 0.3);
+            border: 1.5px solid rgba(0, 212, 255, 0.2);
+        }
+
+        .scroll-to-top:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 48px rgba(0, 212, 255, 0.5);
+        }
+
+        .scroll-to-top.show {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ============= RESPONSIVE ============= */
+        @media (max-width: 1024px) {
+            .grid {
+                grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+                gap: 2rem;
+            }
+
+            .trust-content {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+        }
+
         @media (max-width: 768px) {
             nav {
-                padding: 1rem 3%;
+                padding: 1rem 4%;
             }
 
             .nav-links {
+                display: none;
+                position: absolute;
+                top: 70px;
+                left: 0;
+                right: 0;
+                flex-direction: column;
                 gap: 1rem;
-                font-size: 0.9rem;
+                background: rgba(13, 14, 21, 0.95);
+                backdrop-filter: blur(12px);
+                padding: 2rem 5%;
+                border-bottom: 1px solid rgba(0, 212, 255, 0.1);
             }
 
-            .logo {
-                font-size: 1.4rem;
+            .nav-links.active {
+                display: flex;
+            }
+
+            .hamburger {
+                display: flex;
             }
 
             .hero {
-                padding: 3rem 3%;
-                min-height: 50vh;
+                padding: 3rem 5% 4rem;
+                min-height: 55vh;
             }
 
             .hero h1 {
-                font-size: 2rem;
+                font-size: 2.2rem;
             }
 
             .hero p {
-                font-size: 1rem;
+                font-size: 0.95rem;
             }
 
             .hero-buttons {
@@ -569,236 +1059,529 @@
                 font-size: 1.8rem;
             }
 
-            .trust-content {
-                grid-template-columns: 1fr;
-            }
-
-            .smm-grid,
-            .ff-grid {
+            .grid {
                 grid-template-columns: 1fr;
             }
 
             .service-card,
-            .ff-card {
-                margin: 0 auto;
+            .game-card {
+                margin: 0;
                 width: 100%;
             }
-        }
 
-        /* Animations */
-        @keyframes glow {
-            0%, 100% {
-                text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+            .timeline {
+                grid-template-columns: 1fr;
             }
-            50% {
-                text-shadow: 0 0 20px rgba(0, 212, 255, 0.8);
+
+            .ticker-banner {
+                left: 1rem;
+                right: 1rem;
+                max-width: none;
+                bottom: 1rem;
+            }
+
+            .filter-section {
+                gap: 0.7rem;
+            }
+
+            .filter-btn {
+                padding: 0.6rem 1.2rem;
+                font-size: 0.8rem;
             }
         }
 
-        .animate-glow {
-            animation: glow 2s ease-in-out infinite;
-        }
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 1.6rem;
+            }
 
-        /* Smooth Scrolling */
-        html {
-            scroll-behavior: smooth;
-        }
+            .section-title {
+                font-size: 1.4rem;
+            }
 
-        /* Scroll to Top Button */
-        .scroll-to-top {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            border-radius: 50%;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            z-index: 999;
-            font-size: 1.5rem;
-            transition: all 0.3s ease;
-            box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
-        }
+            .btn {
+                padding: 0.8rem 1.8rem;
+                font-size: 0.85rem;
+            }
 
-        .scroll-to-top:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 0 30px rgba(0, 212, 255, 0.8);
-        }
+            .service-price,
+            .game-price {
+                font-size: 1.5rem;
+            }
 
-        .scroll-to-top.show {
-            display: flex;
+            .stat-number {
+                font-size: 2rem;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Header & Navigation -->
+    <!-- HEADER & NAVIGATION -->
     <header>
         <nav>
-            <a href="#home" class="logo">Nama Brand Anda</a>
+            <a href="#home" class="logo">PULZZ STORE</a>
             <ul class="nav-links">
-                <li><a href="#smm">SMM</a></li>
-                <li><a href="#ff">Free Fire</a></li>
-                <li><a href="#trust">Trust</a></li>
-                <li><button class="login-btn">Login</button></li>
+                <li><a href="#services">LAYANAN</a></li>
+                <li><a href="#games">AKUN GAME</a></li>
+                <li><a href="#how">CARA ORDER</a></li>
+                <li><a href="#faq">FAQ</a></li>
+                <li><button class="login-btn">LOGIN</button></li>
             </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
         </nav>
     </header>
 
-    <!-- Hero Section -->
+    <!-- HERO SECTION -->
     <section class="hero" id="home">
-        <div class="hero-badge">
-            🚀 Platform Terpercaya #1 di Indonesia
-        </div>
-        <h1>
-            Tingkatkan Presensmu <span>Sekarang Juga</span>
-        </h1>
-        <p>
-            Dapatkan Followers Instagram, Likes TikTok, Subscribers YouTube dan Account Free Fire Terbaik dengan Harga Terjangkau. Aman, Cepat, Terpercaya.
-        </p>
-        <div class="hero-buttons">
-            <button class="btn btn-primary" onclick="document.getElementById('smm').scrollIntoView();">🎯 Cek Layanan SMM</button>
-            <button class="btn btn-secondary" onclick="document.getElementById('ff').scrollIntoView();">⚔️ Cari Akun FF</button>
+        <div class="hero-content">
+            <div class="hero-badge">
+                ⚡ PREMIUM DIGITAL SERVICES MARKETPLACE #1
+            </div>
+            <h1>
+                Upgrade Your Digital <span>Presence</span>
+            </h1>
+            <p>
+                Layanan SMM panel terpercaya & marketplace akun game terlengkap di Indonesia. Aman, instant, dan dengan customer support 24/7.
+            </p>
+            <div class="hero-buttons">
+                <button class="btn btn-primary" onclick="document.getElementById('services').scrollIntoView();">Cek Layanan SMM</button>
+                <button class="btn btn-secondary" onclick="document.getElementById('games').scrollIntoView();">Beli Akun Game</button>
+            </div>
         </div>
     </section>
 
-    <!-- SMM Services Section -->
-    <section class="smm-section" id="smm">
+    <!-- SMM SERVICES SECTION -->
+    <section class="services-section" id="services">
         <h2 class="section-title">Layanan <span>SMM Panel</span></h2>
-        <div class="smm-grid">
-            <!-- Instagram Card -->
-            <div class="service-card">
+        <p class="section-subtitle">Paket lengkap untuk meningkatkan engagement media sosial Anda dengan harga terjangkau</p>
+
+        <div class="filter-section">
+            <button class="filter-btn active" onclick="filterProducts('all')">Semua Produk</button>
+            <button class="filter-btn" onclick="filterProducts('instagram')">Instagram</button>
+            <button class="filter-btn" onclick="filterProducts('tiktok')">TikTok</button>
+            <button class="filter-btn" onclick="filterProducts('youtube')">YouTube</button>
+        </div>
+
+        <div class="grid" id="productsGrid">
+            <!-- 1. Instagram Followers Real Indonesia -->
+            <div class="service-card" data-category="instagram">
                 <div class="service-icon">📱</div>
-                <h3>Instagram Growth</h3>
-                <p>Tingkatkan followers dan likes Instagram Anda dengan cepat dan aman. Real engagement dari akun aktif.</p>
-                <button class="btn btn-primary">Beli Followers</button>
-                <button class="btn btn-secondary">Beli Likes</button>
+                <h3>Instagram Followers Real Indonesia</h3>
+                <p>Tingkatkan followers dengan akun nyata & aktif</p>
+                <ul class="service-features">
+                    <li>Akun Aktif & Terverifikasi</li>
+                    <li>Drop Sangat Rendah (Max 1%)</li>
+                    <li>Garansi 30 Hari</li>
+                    <li>Proses Cepat 1-6 Jam</li>
+                </ul>
+                <div class="service-price">Rp 25.000 / 1K</div>
+                <button class="btn btn-primary btn-small">Beli Sekarang</button>
             </div>
 
-            <!-- TikTok Card -->
-            <div class="service-card">
+            <!-- 2. Instagram Likes Fast Server -->
+            <div class="service-card" data-category="instagram">
+                <div class="service-icon">👍</div>
+                <h3>Instagram Likes Fast Server</h3>
+                <p>Likes instan dengan server tercepat</p>
+                <ul class="service-features">
+                    <li>Instan Maksimal 5 Menit</li>
+                    <li>Max Order 50K per Post</li>
+                    <li>Aman Tanpa Password</li>
+                    <li>Support Real Account</li>
+                </ul>
+                <div class="service-price">Rp 5.000 / 1K</div>
+                <button class="btn btn-primary btn-small">Beli Sekarang</button>
+            </div>
+
+            <!-- 3. TikTok Followers Permanent -->
+            <div class="service-card" data-category="tiktok">
                 <div class="service-icon">🎵</div>
-                <h3>TikTok Boost</h3>
-                <p>Dapatkan views, likes, dan followers TikTok instan. Tingkatkan viral rate konten Anda sekarang.</p>
-                <button class="btn btn-primary">Beli Views</button>
-                <button class="btn btn-secondary">Beli Likes</button>
+                <h3>TikTok Followers Permanent</h3>
+                <p>Followers TikTok permanent & aman</p>
+                <ul class="service-features">
+                    <li>Instan Delivered</li>
+                    <li>100% Permanent</li>
+                    <li>Aman untuk Akun Baru</li>
+                    <li>Non-Drop Guarantee</li>
+                </ul>
+                <div class="service-price">Rp 35.000 / 1K</div>
+                <button class="btn btn-primary btn-small">Beli Sekarang</button>
             </div>
 
-            <!-- YouTube Card -->
-            <div class="service-card">
+            <!-- 4. TikTok Views FYP Booster -->
+            <div class="service-card" data-category="tiktok">
+                <div class="service-icon">👀</div>
+                <h3>TikTok Views FYP Booster</h3>
+                <p>Boost views untuk masuk algoritma FYP</p>
+                <ul class="service-features">
+                    <li>Kecepatan Tinggi</li>
+                    <li>Bagus untuk Algoritma</li>
+                    <li>Support Viral Video</li>
+                    <li>Real Engagement</li>
+                </ul>
+                <div class="service-price">Rp 2.000 / 1K</div>
+                <button class="btn btn-primary btn-small">Beli Sekarang</button>
+            </div>
+
+            <!-- 5. TikTok Likes Target Indonesia -->
+            <div class="service-card" data-category="tiktok">
+                <div class="service-icon">❤️</div>
+                <h3>TikTok Likes Target Indonesia</h3>
+                <p>Likes dari user Indonesia yang real</p>
+                <ul class="service-features">
+                    <li>Meningkatkan Engagement</li>
+                    <li>Real User Indonesia</li>
+                    <li>Cepat & Reliable</li>
+                    <li>Support Semua Jenis Video</li>
+                </ul>
+                <div class="service-price">Rp 12.000 / 1K</div>
+                <button class="btn btn-primary btn-small">Beli Sekarang</button>
+            </div>
+
+            <!-- 6. YouTube Subscribers Permanent -->
+            <div class="service-card" data-category="youtube">
                 <div class="service-icon">▶️</div>
-                <h3>YouTube Mastery</h3>
-                <p>Perkuat channel YouTube dengan subscribers dan views asli. Sempurna untuk monetisasi cepat.</p>
-                <button class="btn btn-primary">Beli Subscribers</button>
-                <button class="btn btn-secondary">Beli Views</button>
+                <h3>YouTube Subscribers Permanen</h3>
+                <p>Subscribers yang aman & tidak drop</p>
+                <ul class="service-features">
+                    <li>Dari Akun Tua & Verified</li>
+                    <li>No Drop Guarantee</li>
+                    <li>Garansi Seumur Hidup</li>
+                    <li>Monetize Ready</li>
+                </ul>
+                <div class="service-price">Rp 150.000 / 1K</div>
+                <button class="btn btn-secondary btn-small">Beli Sekarang</button>
+            </div>
+
+            <!-- 7. YouTube Jam Tayang Monetisasi -->
+            <div class="service-card" data-category="youtube">
+                <div class="service-icon">⏰</div>
+                <h3>YouTube Jam Tayang (Monetisasi)</h3>
+                <p>Jam tayang untuk syarat monetisasi</p>
+                <ul class="service-features">
+                    <li>Retensi Viewer Tinggi</li>
+                    <li>Aman untuk AdSense</li>
+                    <li>Kualitas Watch Time Premium</li>
+                    <li>Proses Cepat & Stabil</li>
+                </ul>
+                <div class="service-price">Rp 80.000 / 1K Jam</div>
+                <button class="btn btn-secondary btn-small">Beli Sekarang</button>
+            </div>
+
+            <!-- 8. Paket Selebgram Pemula -->
+            <div class="service-card" data-category="all">
+                <div class="service-icon">⭐</div>
+                <h3>Paket Selebgram Pemula (Bundle)</h3>
+                <p>Paket hemat untuk pembuat konten pemula</p>
+                <ul class="service-features">
+                    <li>1K Followers Instagram</li>
+                    <li>500 Likes per Post</li>
+                    <li>2K Views TikTok/Reels</li>
+                    <li>Paket Hemat Super Terjangkau</li>
+                </ul>
+                <div class="service-price">Rp 50.000</div>
+                <button class="btn btn-secondary btn-small">Beli Sekarang</button>
+            </div>
+
+            <!-- 9. Paket Booster UMKM/Bisnis -->
+            <div class="service-card" data-category="all">
+                <div class="service-icon">🏢</div>
+                <h3>Paket Booster UMKM/Bisnis</h3>
+                <p>Paket lengkap untuk branding bisnis</p>
+                <ul class="service-features">
+                    <li>2K Followers Indo Real</li>
+                    <li>1K Likes + Engagement</li>
+                    <li>Komentar Positif Opsional</li>
+                    <li>Support Customer Service 24/7</li>
+                </ul>
+                <div class="service-price">Rp 99.000</div>
+                <button class="btn btn-secondary btn-small">Beli Sekarang</button>
             </div>
         </div>
     </section>
 
-    <!-- Free Fire Accounts Section -->
-    <section class="ff-section" id="ff">
-        <h2 class="section-title">Toko <span>Free Fire</span> Kami</h2>
-        <div class="ff-grid">
-            <!-- Account 1 -->
-            <div class="ff-card">
-                <div class="ff-image">
-                    🎮
-                </div>
-                <div class="ff-card-content">
-                    <span class="ff-level">Level 47</span>
-                    <h3>Elite Guardian</h3>
-                    <p class="ff-skins">📦 25 Skins Terbaik</p>
-                    <div class="ff-price">Rp 450.000</div>
+    <!-- GAME ACCOUNTS SECTION -->
+    <section class="services-section" id="games">
+        <h2 class="section-title">Akun <span>Game</span> Terlengkap</h2>
+        <p class="section-subtitle">Ribuan akun game berkualitas dengan harga kompetitif dan garansi kepuasan 100%</p>
+
+        <div class="grid">
+            <!-- 1. Akun FF Sultan Old S1 -->
+            <div class="game-card">
+                <div class="game-image">👑</div>
+                <div class="game-card-content">
+                    <div class="badges">
+                        <span class="badge">Level 72</span>
+                        <span class="badge secondary">Sultan</span>
+                    </div>
+                    <h3>Sultan Old S1</h3>
+                    <ul class="specs">
+                        <li>450+ Skins Lengkap</li>
+                        <li>Set Elite Pass S1 & S2</li>
+                        <li>Weapon Evo Max</li>
+                        <li>Vault Terisi Rare Items</li>
+                    </ul>
+                    <span class="status">✓ Log FB (Unbind)</span>
+                    <div class="game-price">Rp 1.500.000</div>
                     <button class="btn btn-secondary">Detail Akun</button>
                 </div>
             </div>
 
-            <!-- Account 2 -->
-            <div class="ff-card">
-                <div class="ff-image">
-                    ⚡
-                </div>
-                <div class="ff-card-content">
-                    <span class="ff-level">Level 52</span>
-                    <h3>Pro Hunter</h3>
-                    <p class="ff-skins">📦 38 Skins Eksklusif</p>
-                    <div class="ff-price">Rp 680.000</div>
+            <!-- 2. Akun Spesial Evo Gun Max -->
+            <div class="game-card">
+                <div class="game-image">⚡</div>
+                <div class="game-card-content">
+                    <div class="badges">
+                        <span class="badge">Level 68</span>
+                        <span class="badge secondary">Evo Max</span>
+                    </div>
+                    <h3>Spesial Evo Gun Max</h3>
+                    <ul class="specs">
+                        <li>320+ Skins Total</li>
+                        <li>Scar Titan + AK Naga</li>
+                        <li>5 Senjata Evo Max</li>
+                        <li>Karakter Eksklusif</li>
+                    </ul>
+                    <span class="status">✓ Log Google</span>
+                    <div class="game-price">Rp 2.200.000</div>
                     <button class="btn btn-secondary">Detail Akun</button>
                 </div>
             </div>
 
-            <!-- Account 3 -->
-            <div class="ff-card">
-                <div class="ff-image">
-                    🏆
-                </div>
-                <div class="ff-card-content">
-                    <span class="ff-level">Level 55</span>
-                    <h3>Legends Warrior</h3>
-                    <p class="ff-skins">📦 52 Skins + Pet Premium</p>
-                    <div class="ff-price">Rp 950.000</div>
+            <!-- 3. Akun Ready Rekber Pelajar -->
+            <div class="game-card">
+                <div class="game-image">🎓</div>
+                <div class="game-card-content">
+                    <div class="badges">
+                        <span class="badge">Level 55</span>
+                        <span class="badge secondary">Starter</span>
+                    </div>
+                    <h3>Ready Rekber Pelajar</h3>
+                    <ul class="specs">
+                        <li>80+ Skins Pilihan</li>
+                        <li>Set Bundling Keren</li>
+                        <li>Vault Rapi Teroganisir</li>
+                        <li>Cocok untuk Pemula</li>
+                    </ul>
+                    <span class="status">✓ Log FB</span>
+                    <div class="game-price">Rp 150.000</div>
                     <button class="btn btn-secondary">Detail Akun</button>
                 </div>
             </div>
 
-            <!-- Account 4 -->
-            <div class="ff-card">
-                <div class="ff-image">
-                    👑
-                </div>
-                <div class="ff-card-content">
-                    <span class="ff-level">Level 58</span>
-                    <h3>Ultimate Champion</h3>
-                    <p class="ff-skins">📦 60+ Skins Legendary</p>
-                    <div class="ff-price">Rp 1.200.000</div>
+            <!-- 4. Akun Semi-Sultan Booyah Pass -->
+            <div class="game-card">
+                <div class="game-image">🎯</div>
+                <div class="game-card-content">
+                    <div class="badges">
+                        <span class="badge">Level 63</span>
+                        <span class="badge secondary">Semi-Sultan</span>
+                    </div>
+                    <h3>Semi-Sultan Booyah Pass</h3>
+                    <ul class="specs">
+                        <li>190+ Skins Eksklusif</li>
+                        <li>Full Set Booyah Vol 1-5</li>
+                        <li>Pet Premium Langka</li>
+                        <li>Ranked Ready</li>
+                    </ul>
+                    <span class="status">✓ Log Google</span>
+                    <div class="game-price">Rp 450.000</div>
                     <button class="btn btn-secondary">Detail Akun</button>
                 </div>
             </div>
 
-            <!-- Account 5 -->
-            <div class="ff-card">
-                <div class="ff-image">
-                    🌟
-                </div>
-                <div class="ff-card-content">
-                    <span class="ff-level">Level 50</span>
-                    <h3>Cyber Assassin</h3>
-                    <p class="ff-skins">📦 32 Skins Rare</p>
-                    <div class="ff-price">Rp 580.000</div>
+            <!-- 5. Akun Vault Old & Bundle Langka -->
+            <div class="game-card">
+                <div class="game-image">💎</div>
+                <div class="game-card-content">
+                    <div class="badges">
+                        <span class="badge">Level 70</span>
+                        <span class="badge secondary">Langka</span>
+                    </div>
+                    <h3>Vault Old & Bundle Langka</h3>
+                    <ul class="specs">
+                        <li>280+ Skins Rare Old</li>
+                        <li>Celana Malaikat Langka</li>
+                        <li>Masker Letda Exclusive</li>
+                        <li>Weapon Skin Limited</li>
+                    </ul>
+                    <span class="status">✓ Log FB</span>
+                    <div class="game-price">Rp 850.000</div>
                     <button class="btn btn-secondary">Detail Akun</button>
                 </div>
             </div>
 
-            <!-- Account 6 -->
-            <div class="ff-card">
-                <div class="ff-image">
-                    💎
+            <!-- 6. Akun Akurasi Tinggi Rank GM -->
+            <div class="game-card">
+                <div class="game-image">🏆</div>
+                <div class="game-card-content">
+                    <div class="badges">
+                        <span class="badge">Level 65</span>
+                        <span class="badge secondary">Rank GM</span>
+                    </div>
+                    <h3>Akurasi Tinggi (Rank GM)</h3>
+                    <ul class="specs">
+                        <li>150+ Skins Pilihan</li>
+                        <li>Mantan Grandmaster Rank</li>
+                        <li>KD Ratio Tinggi</li>
+                        <li>Ready untuk Grinding</li>
+                    </ul>
+                    <span class="status">✓ Log Google</span>
+                    <div class="game-price">Rp 350.000</div>
+                    <button class="btn btn-secondary">Detail Akun</button>
                 </div>
-                <div class="ff-card-content">
-                    <span class="ff-level">Level 60</span>
-                    <h3>Diamond Supreme</h3>
-                    <p class="ff-skins">📦 75 Skins All Tier</p>
-                    <div class="ff-price">Rp 1.500.000</div>
+            </div>
+
+            <!-- 7. Akun Ekonomis Paket Starter -->
+            <div class="game-card">
+                <div class="game-image">🎮</div>
+                <div class="game-card-content">
+                    <div class="badges">
+                        <span class="badge">Level 50</span>
+                        <span class="badge secondary">Budget</span>
+                    </div>
+                    <h3>Ekonomis Paket Starter</h3>
+                    <ul class="specs">
+                        <li>50+ Skins Basic</li>
+                        <li>Cocok untuk Smurf</li>
+                        <li>Low Price High Value</li>
+                        <li>Support untuk Bahan</li>
+                    </ul>
+                    <span class="status">✓ Log FB</span>
+                    <div class="game-price">Rp 75.000</div>
+                    <button class="btn btn-secondary">Detail Akun</button>
+                </div>
+            </div>
+
+            <!-- 8. Akun Full Set Kolaborasi Anime -->
+            <div class="game-card">
+                <div class="game-image">🌟</div>
+                <div class="game-card-content">
+                    <div class="badges">
+                        <span class="badge">Level 67</span>
+                        <span class="badge secondary">Anime</span>
+                    </div>
+                    <h3>Full Set Kolaborasi (Anime)</h3>
+                    <ul class="specs">
+                        <li>210+ Skins Eksklusif</li>
+                        <li>Set Attack on Titan</li>
+                        <li>One Punch Man Skins</li>
+                        <li>Limited Edition Items</li>
+                    </ul>
+                    <span class="status">✓ Log Google</span>
+                    <div class="game-price">Rp 1.200.000</div>
                     <button class="btn btn-secondary">Detail Akun</button>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Trust Section -->
-    <section class="trust-section" id="trust">
-        <h2 class="section-title">Mengapa <span>Kami?</span></h2>
+    <!-- HOW IT WORKS SECTION -->
+    <section class="how-it-works" id="how">
+        <h2 class="section-title">Cara <span>Order</span> (3 Langkah Mudah)</h2>
+        <p class="section-subtitle">Proses ordering yang sangat cepat dan mudah dalam hanya 3 langkah sederhana</p>
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-number">1</div>
+                <h4>Pilih Layanan</h4>
+                <p>Tentukan paket SMM atau akun game yang Anda inginkan dari katalog lengkap kami dengan harga transparan.</p>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-number">2</div>
+                <h4>Lakukan Pembayaran</h4>
+                <p>Lakukan pembayaran melalui berbagai metode yang kami sediakan. Proses verifikasi instan dan aman.</p>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-number">3</div>
+                <h4>Proses Instan</h4>
+                <p>Layanan kami langsung diproses dalam hitungan menit. Tracking real-time tersedia untuk semua order.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ SECTION -->
+    <section class="faq-section" id="faq">
+        <h2 class="section-title">Pertanyaan <span>Umum (FAQ)</span></h2>
+        <p class="section-subtitle">Jawaban atas pertanyaan yang sering diajukan pelanggan kami</p>
+        <div class="faq-container">
+            <div class="faq-item active">
+                <div class="faq-question">
+                    Apakah layanan PULZZ STORE aman dan terpercaya?
+                    <span class="faq-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Tentu! PULZZ STORE telah melayani lebih dari 50.000 transaksi sukses dengan tingkat kepuasan 99.8%. Kami menggunakan enkripsi tingkat bank untuk keamanan data Anda. Semua layanan kami dilindungi dengan garansi uang kembali 100%.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    Berapa lama waktu pengiriman untuk layanan SMM?
+                    <span class="faq-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Tergantung jenis layanan, umumnya pengiriman dimulai dalam 5-30 menit setelah pembayaran terverifikasi. Untuk layanan tertentu seperti Likes Instagram, bisa hanya dalam 5 menit. Untuk Followers dan layanan lainnya, biasanya 1-6 jam.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    Apakah akun saya akan kena banned karena menggunakan layanan Anda?
+                    <span class="faq-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Tidak! Layanan kami dirancang untuk aman dan sesuai dengan terms of service platform media sosial. Kami menggunakan real accounts dan engagement alami. Sudah terbukti aman digunakan oleh ribuan pengguna tanpa ada masalah.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    Bagaimana cara membeli akun game di marketplace Anda?
+                    <span class="faq-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Sangat mudah! Pilih akun yang Anda inginkan, klik "Detail Akun" untuk melihat info lengkap, lalu klik "Beli" untuk melanjutkan ke checkout. Setelah pembayaran sukses, data login akun akan dikirim langsung ke email Anda.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    Apakah ada garansi untuk akun game yang saya beli?
+                    <span class="faq-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Ya! Semua akun kami dilengkapi dengan garansi 7 hari uang kembali jika ada kecurangan atau akun bermasalah. Kami juga menyediakan customer support 24/7 untuk membantu masalah apapun terkait akun Anda.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    Metode pembayaran apa saja yang tersedia?
+                    <span class="faq-icon">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Kami menerima berbagai metode pembayaran: GCash, Dana, OVO, QRIS, Transfer Bank (BRI, BCA, Mandiri, dsb), dan Cryptocurrency. Semua transaksi diproses dengan aman dan cepat dengan notifikasi real-time.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TRUST SECTION -->
+    <section class="trust-section">
+        <h2 class="section-title">Mengapa <span>Pilih PULZZ STORE?</span></h2>
         <div class="trust-content">
             <div class="trust-stats">
                 <div class="stat-item">
                     <div class="stat-number">50K+</div>
-                    <div class="stat-label">Transaksi Selesai</div>
+                    <div class="stat-label">Transaksi Berhasil</div>
                 </div>
                 <div class="stat-item">
                     <div class="stat-number">15K+</div>
-                    <div class="stat-label">Pengguna Aktif</div>
+                    <div class="stat-label">Pelanggan Aktif</div>
                 </div>
                 <div class="stat-item">
                     <div class="stat-number">99.8%</div>
@@ -811,7 +1594,7 @@
             </div>
 
             <div class="payment-methods">
-                <h3 class="payment-title">💳 Metode Pembayaran Kami</h3>
+                <h3 class="payment-title">💳 Metode Pembayaran Aman</h3>
                 <div class="payment-logos">
                     <div class="payment-logo">GCash</div>
                     <div class="payment-logo">Dana</div>
@@ -820,23 +1603,23 @@
                     <div class="payment-logo">Bank</div>
                     <div class="payment-logo">Crypto</div>
                 </div>
-                <p style="color: var(--text-secondary); margin-top: 1rem;">
-                    Semua transaksi dilindungi dengan enkripsi tingkat bank. Data Anda 100% aman bersama kami.
+                <p style="color: var(--text-secondary); margin-top: 1.5rem; line-height: 1.7;">
+                    ✅ Semua transaksi dilindungi dengan enkripsi tingkat bank. Data Anda 100% aman & privasi terjaga. Garansi uang kembali jika layanan tidak diterima. Support 24/7 siap membantu Anda kapan saja.
                 </p>
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
+    <!-- FOOTER -->
     <footer>
         <div class="footer-content">
             <div class="footer-section">
-                <h3>Tentang Kami</h3>
+                <h3>Tentang PULZZ</h3>
                 <ul>
                     <li><a href="#home">Beranda</a></li>
-                    <li><a href="#smm">Layanan SMM</a></li>
-                    <li><a href="#ff">Akun Free Fire</a></li>
-                    <li><a href="#trust">Kepercayaan</a></li>
+                    <li><a href="#services">Layanan SMM</a></li>
+                    <li><a href="#games">Akun Game</a></li>
+                    <li><a href="#how">Cara Order</a></li>
                 </ul>
             </div>
             <div class="footer-section">
@@ -845,48 +1628,64 @@
                     <li><a href="#">Instagram Growth</a></li>
                     <li><a href="#">TikTok Boost</a></li>
                     <li><a href="#">YouTube Mastery</a></li>
-                    <li><a href="#">FF Marketplace</a></li>
+                    <li><a href="#">Game Marketplace</a></li>
                 </ul>
             </div>
             <div class="footer-section">
-                <h3>Legal</h3>
+                <h3>Legal & Support</h3>
                 <ul>
                     <li><a href="#">Kebijakan Privasi</a></li>
                     <li><a href="#">Syarat & Ketentuan</a></li>
                     <li><a href="#">Kebijakan Pengembalian</a></li>
-                    <li><a href="#">Hubungi Kami</a></li>
+                    <li><a href="#faq">FAQ</a></li>
                 </ul>
             </div>
             <div class="footer-section">
-                <h3>Kontak</h3>
+                <h3>Kontak Kami</h3>
                 <ul>
-                    <li><a href="mailto:support@namabrandu.com">📧 support@namabrandu.com</a></li>
-                    <li><a href="https://wa.me/6281234567890">📱 WhatsApp Support</a></li>
-                    <li><a href="#">🕐 Jam Operasional: 24/7</a></li>
+                    <li><a href="mailto:support@pulzzstore.com">📧 support@pulzzstore.com</a></li>
+                    <li><a href="https://wa.me/6281234567890">📱 WhatsApp 24/7</a></li>
+                    <li><a href="#">🕐 Online Sepanjang Hari</a></li>
                     <li><a href="#">📍 Indonesia</a></li>
                 </ul>
             </div>
         </div>
         <div class="footer-bottom">
-            <p>&copy; 2024-2025 Nama Brand Anda. Semua Hak Dilindungi. | Platform Jual Beli SMM & Account FF Terpercaya</p>
+            <p>&copy; 2024-2025 PULZZ STORE. Semua Hak Dilindungi. | Platform SMM & Game Marketplace Terpercaya #1</p>
         </div>
     </footer>
 
-    <!-- Scroll to Top Button -->
-    <div class="scroll-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'});">↑</div>
+    <!-- LIVE TICKER -->
+    <div class="ticker-banner" id="ticker">
+        <div class="ticker-content">
+            <div class="ticker-icon">✓</div>
+            <div class="ticker-text">
+                <span class="ticker-user">User_4829</span>
+                <span class="ticker-action"> baru membeli 5K TikTok Followers - Sukses!</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCROLL TO TOP -->
+    <div class="scroll-to-top" id="scrollToTop">↑</div>
 
     <script>
-        // Show/hide scroll to top button
-        window.addEventListener('scroll', function() {
-            const scrollToTop = document.querySelector('.scroll-to-top');
-            if (window.pageYOffset > 300) {
-                scrollToTop.classList.add('show');
-            } else {
-                scrollToTop.classList.remove('show');
-            }
+        // Hamburger Menu
+        const hamburger = document.querySelector('.hamburger');
+        const navLinks = document.querySelector('.nav-links');
+
+        hamburger.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
         });
 
-        // Smooth scroll for buttons
+        // Close menu when link is clicked
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+            });
+        });
+
+        // Smooth scroll
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
@@ -900,18 +1699,82 @@
             });
         });
 
-        // Button click animations
-        document.querySelectorAll('.btn').forEach(button => {
-            button.addEventListener('click', function() {
-                console.log('Button clicked:', this.textContent);
-                // Add your action here (redirect to checkout, open modal, etc)
+        // Scroll to top button
+        const scrollToTop = document.getElementById('scrollToTop');
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                scrollToTop.classList.add('show');
+            } else {
+                scrollToTop.classList.remove('show');
+            }
+        });
+
+        scrollToTop.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
             });
         });
 
-        // Add hover effects to service cards
-        document.querySelectorAll('.service-card, .ff-card').forEach(card => {
-            card.addEventListener('mouseenter', function() {
-                this.style.transition = 'all 0.4s ease';
+        // Filter Products
+        function filterProducts(category) {
+            const cards = document.querySelectorAll('.service-card');
+            const buttons = document.querySelectorAll('.filter-btn');
+
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            cards.forEach(card => {
+                if (category === 'all' || card.dataset.category === category || card.dataset.category === 'all') {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // FAQ Accordion
+        const faqItems = document.querySelectorAll('.faq-item');
+        faqItems.forEach(item => {
+            const question = item.querySelector('.faq-question');
+            question.addEventListener('click', () => {
+                // Close other items
+                faqItems.forEach(otherItem => {
+                    if (otherItem !== item) {
+                        otherItem.classList.remove('active');
+                    }
+                });
+                // Toggle current item
+                item.classList.toggle('active');
+            });
+        });
+
+        // Live Ticker
+        const tickets = [
+            { user: 'User_4829', action: 'baru membeli 5K TikTok Followers' },
+            { user: 'User_2156', action: 'baru membeli Akun FF Sultan' },
+            { user: 'User_7842', action: 'baru membeli 2K Instagram Followers' },
+            { user: 'User_5391', action: 'baru membeli 10K YouTube Views' },
+            { user: 'User_1023', action: 'baru membeli Paket Selebgram' }
+        ];
+
+        let currentTicket = 0;
+        const ticker = document.getElementById('ticker');
+
+        function updateTicker() {
+            const ticket = tickets[currentTicket];
+            ticker.querySelector('.ticker-user').textContent = ticket.user;
+            ticker.querySelector('.ticker-action').textContent = ' ' + ticket.action + ' - Sukses!';
+            
+            currentTicket = (currentTicket + 1) % tickets.length;
+        }
+
+        setInterval(updateTicker, 8000);
+
+        // Button ripple effect
+        document.querySelectorAll('.btn').forEach(button => {
+            button.addEventListener('click', function(e) {
+                console.log('Button clicked:', this.textContent);
             });
         });
     </script>
