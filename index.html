@@ -787,4 +787,282 @@
         const SMM_PRICE_LIST = {
             'follower-ig': {
                 name: 'Follower Instagram',
-                prices: {100:5000, 200:10000, 300:14000, 400:17000, 500:20000, 600:24000, 7
+                prices: {100:5000, 200:10000, 300:14000, 400:17000, 500:20000, 600:24000, 700:28000, 800:31000, 900:33000, 1000:35000}
+            },
+            'follower-ig-indo': {
+                name: 'Follower Ig Indo',
+                prices: {100:10000, 200:20000, 300:30000, 400:40000, 500:50000, 600:58000, 700:66000, 800:72000, 900:76000, 1000:80000}
+            },
+            'like-ig': {
+                name: 'Like Instagram',
+                prices: {200:5000, 300:6000, 400:7000, 500:9000, 600:10000, 700:11000, 800:12000, 900:13000, 1000:14000, 1200:15000}
+            },
+            'view-ig': {
+                name: 'View Instagram',
+                prices: {5000:5000, 6500:6000, 8000:7000, 9500:8000, 11000:9000, 12500:10000, 14000:11000, 15500:12000, 17000:13000, 20000:15000}
+            },
+            'pengikut-channel': {
+                name: 'Pengikut Saluran WA',
+                prices: {100:10000, 200:20000, 300:30000, 400:37000, 500:45000, 600:53000, 700:61000, 800:69000, 900:77000, 1000:85000}
+            }
+        };
+
+        let appData = [];
+        let currentFilter = 'All';
+        let isAdmin = false;
+        let selectedAcc = null;
+
+        window.toggleDropdown = function(id) {
+            const wrap = document.getElementById(id + '-wrap');
+            const items = wrap.querySelector('.select-items');
+            const selected = wrap.querySelector('.select-selected');
+            document.querySelectorAll('.select-items').forEach(el => {
+                if (el!== items) el.classList.add('select-hide');
+            });
+            document.querySelectorAll('.select-selected').forEach(el => {
+                if (el!== selected) el.classList.remove('select-arrow-active');
+            });
+            items.classList.toggle('select-hide');
+            selected.classList.toggle('select-arrow-active');
+        }
+
+        window.selectOption = function(id, value, text) {
+            document.getElementById(id).value = value;
+            const wrap = document.getElementById(id + '-wrap');
+            wrap.querySelector('.select-selected').innerText = text;
+            wrap.querySelector('.select-items').classList.add('select-hide');
+            wrap.querySelector('.select-selected').classList.remove('select-arrow-active');
+
+            if(id === 'smm-layanan') updateQtyOptions();
+            if(id === 'smm-qty') hitungHargaSMM();
+        }
+
+        document.addEventListener("click", function(e) {
+            if (!e.target.closest('.custom-select')) {
+                document.querySelectorAll('.select-items').forEach(el => el.classList.add('select-hide'));
+                document.querySelectorAll('.select-selected').forEach(el => el.classList.remove('select-arrow-active'));
+            }
+        });
+
+        function initApp() {
+            onValue(katalogRef, (snapshot) => {
+                const data = snapshot.val();
+                appData = data? Object.values(data) : [];
+                renderCatalog();
+                if(isAdmin) renderAdminList();
+                updateStats();
+            });
+            updateQtyOptions();
+            document.getElementById('smm-form').addEventListener('submit', window.processSmmOrder);
+            navigateTo('view-landing');
+        }
+
+        window.updateQtyOptions = function() {
+            const layanan = document.getElementById('smm-layanan').value;
+            const itemsDiv = document.getElementById('smm-qty-items');
+            const currentQty = document.getElementById('smm-qty').value;
+            const prices = SMM_PRICE_LIST[layanan].prices;
+
+            itemsDiv.innerHTML = '';
+            Object.keys(prices).forEach(qty => {
+                const div = document.createElement('div');
+                div.dataset.value = qty;
+                div.innerText = `${parseInt(qty).toLocaleString('id-ID')}`;
+                if(qty == currentQty) div.classList.add('same-as-selected');
+                div.onclick = () => selectOption('smm-qty', qty, `${parseInt(qty).toLocaleString('id-ID')}`);
+                itemsDiv.appendChild(div);
+            });
+            document.getElementById('smm-qty-wrap').querySelector('.select-selected').innerText =
+                currentQty? `${parseInt(currentQty).toLocaleString('id-ID')}` : 'Pilih Jumlah';
+            hitungHargaSMM();
+        }
+
+        window.navigateTo = function(viewId) {
+            if(viewId === 'admin' &&!isAdmin) {
+                openLoginModal();
+                return;
+            }
+            document.querySelectorAll('.page-view').forEach(el => el.classList.remove('active'));
+            document.getElementById('view-' + viewId).classList.add('active');
+            window.scrollTo(0, 0);
+            if(viewId === 'home') renderCatalog();
+            if(viewId === 'admin' && isAdmin) renderAdminList();
+            if(viewId === 'smm') {
+                document.getElementById('smm-target').value = "";
+                updateQtyOptions();
+            }
+        }
+
+        window.setCategory = function(cat) {
+            currentFilter = cat;
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.innerText === cat || (cat === 'All' && btn.innerText === 'Semua Kategori'));
+            });
+            renderCatalog();
+        }
+
+        function renderCatalog() {
+            const grid = document.getElementById('catalog-grid');
+            const empty = document.getElementById('empty-state');
+            if(!grid) return;
+            grid.innerHTML = '';
+            let filtered = currentFilter === 'All'? appData : appData.filter(a => a.category === currentFilter);
+            if(filtered.length === 0) {
+                empty.classList.remove('hidden');
+            } else {
+                empty.classList.add('hidden');
+                filtered.forEach(acc => {
+                    const cover = acc.images[0] || 'https://via.placeholder.com/400/1F2633/3B82F6?text=No+Image';
+                    grid.innerHTML += `<div class="product-card" onclick="window.openDetail('${acc.id}')">
+                        <div class="product-image">
+                            <img src="${cover}" onerror="this.src='https://via.placeholder.com/400/1F2633/3B82F6?text=No+Image'">
+                            <div class="category-badge">${acc.category}</div>
+                            <div class="price-badge">Rp ${acc.price.toLocaleString('id-ID')}</div>
+                        </div>
+                        <div class="p-5">
+                            <h3 class="text-sm font-bold text-gray-100 line-clamp-2 mb-3 group-hover:text-blue-400 transition-colors">${acc.title}</h3>
+                            <div class="flex justify-between items-center mb-3">
+                                <div class="text-xs text-gray-500 font-semibold">ID: ${acc.id}</div>
+                            </div>
+                            <button class="w-full bg-dark-800/50 border-dark-border group-hover:bg-blue-600/20 group-hover:border-blue-500/50 text-gray-400 group-hover:text-blue-300 text-xs font-bold py-2.5 rounded-lg transition-all">
+                                CEK SPESIFIKASI
+                            </button>
+                        </div>
+                    </div>`;
+                });
+            }
+        }
+
+        window.openDetail = function(id) {
+            selectedAcc = appData.find(a => a.id === id);
+            if(!selectedAcc) return;
+            document.getElementById('detail-id').innerText = selectedAcc.id;
+            document.getElementById('detail-category').innerText = selectedAcc.category;
+            document.getElementById('detail-title').innerText = selectedAcc.title;
+            document.getElementById('detail-price').innerText = `Rp ${selectedAcc.price.toLocaleString('id-ID')}`;
+            document.getElementById('detail-specs').innerText = selectedAcc.specs;
+            setDetailImage(selectedAcc.images[0]);
+            const thumbBox = document.getElementById('detail-thumbnails');
+            thumbBox.innerHTML = '';
+            selectedAcc.images.forEach((img, idx) => {
+                const el = document.createElement('img');
+                el.src = img;
+                el.onerror = () => el.src='https://via.placeholder.com/64/1F2633/3B82F6?text=Err';
+                el.className = `w-16 h-16 object-cover rounded-lg cursor-pointer border-2 transition-all flex-shrink-0 ${idx===0? 'border-blue-500 opacity-100 shadow-lg shadow-blue-500/30' : 'border-dark-border opacity-60 hover:opacity-100 hover:border-gray-400'}`;
+                el.onclick = function() {
+                    setDetailImage(img);
+                    Array.from(thumbBox.children).forEach(c => c.className = "w-16 h-16 object-cover rounded-lg cursor-pointer border-2 transition-all flex-shrink-0 border-dark-border opacity-60 hover:opacity-100 hover:border-gray-400");
+                    this.className = "w-16 h-16 object-cover rounded-lg cursor-pointer border-2 transition-all flex-shrink-0 border-blue-500 opacity-100 shadow-lg shadow-blue-500/30";
+                };
+                thumbBox.appendChild(el);
+            });
+            navigateTo('detail');
+        }
+
+        function setDetailImage(url) { document.getElementById('detail-main-img').src = url; }
+
+        window.buyNow = function() {
+            if(!selectedAcc) return;
+            const bayar = document.getElementById('detail-bayar').value;
+            const msg = `Halo Admin PulzzStore!\nSaya mau beli akun Premium ini:\n\n*ID:* ${selectedAcc.id}\n*Kategori:* ${selectedAcc.category}\n*Judul:* ${selectedAcc.title}\n*Harga:* Rp ${selectedAcc.price.toLocaleString('id-ID')}\n*Bayar via:* ${bayar}\n\nTolong proses ya min!`;
+            window.open(`https://wa.me/${ADMIN_WA}?text=${encodeURIComponent(msg)}`, '_blank');
+        }
+
+        window.openLoginModal = function() {
+            if(isAdmin) { navigateTo('admin'); return; }
+            document.getElementById('login-modal').classList.remove('hidden');
+            setTimeout(() => document.getElementById('login-box').classList.remove('scale-95'), 10);
+        }
+
+        window.closeLoginModal = function() {
+            document.getElementById('login-box').classList.add('scale-95');
+            setTimeout(() => document.getElementById('login-modal').classList.add('hidden'), 300);
+            document.getElementById('admin-password').value = '';
+        }
+
+        window.verifyLogin = function() {
+            if(document.getElementById('admin-password').value === ADMIN_PASS) {
+                isAdmin = true;
+                document.getElementById('admin-card').classList.remove('hidden');
+                closeLoginModal();
+                document.getElementById('nav-admin-btn').classList.remove('hidden');
+                navigateTo('admin');
+            } else { alert("Sandi salah!"); }
+        }
+
+        window.saveNewAccount = function(e) {
+            e.preventDefault();
+            const manualId = document.getElementById('input-id').value.trim();
+            const cat = document.getElementById('input-cat').value;
+            const tit = document.getElementById('input-title').value.trim();
+            const prc = parseInt(document.getElementById('input-price').value);
+            const spc = document.getElementById('input-specs').value.trim();
+            const imgs = document.getElementById('input-images').value.split(',').map(i => i.trim()).filter(i => i!== "");
+            if(!tit ||!prc ||!spc || imgs.length === 0) { alert("Semua field wajib isi, kecuali ID."); return; }
+            let newId = manualId;
+            if(newId === "") {
+                newId = `PZ-${cat.substring(0,2).toUpperCase()}-${Math.floor(1000 + Math.random() * 9000)}`;
+            } else {
+                if(appData.find(a => a.id === newId)) { alert(`Gagal! ID ${newId} sudah dipakai.`); return; }
+            }
+            const newAcc = { id: newId, category: cat, title: tit, price: prc, specs: spc, images: imgs };
+            set(ref(db, 'katalog/' + newId), newAcc);
+            document.getElementById('admin-form').reset();
+            alert(`Berhasil! Akun ${newId} live sekarang.`);
+        }
+
+        window.renderAdminList = function() {
+            const list = document.getElementById('admin-account-list');
+            if(!list) return;
+            list.innerHTML = '';
+            appData.forEach(acc => {
+                list.innerHTML += `<div class="admin-table-row">
+                    <div class="flex-1">
+                        <div class="text-xs text-blue-400 font-bold tracking-wide">${acc.id}</div>
+                        <div class="text-sm text-gray-200 font-semibold line-clamp-1">${acc.title}</div>
+                        <div class="text-xs text-gray-500 mt-1">${acc.category}</div>
+                    </div>
+                    <button onclick="window.deleteAccount('${acc.id}')" class="btn-danger ml-3 flex-shrink-0">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </div>`;
+            });
+        }
+
+        window.deleteAccount = function(id) {
+            if(confirm('Hapus akun ' + id + '?')) {
+                remove(ref(db, 'katalog/' + id));
+            }
+        }
+
+        window.updateStats = function() {
+            document.getElementById('stat-total').innerText = appData.length;
+            document.getElementById('stat-smm').innerText = Object.keys(SMM_PRICE_LIST).length;
+        }
+
+        window.hitungHargaSMM = function() {
+            const layanan = document.getElementById('smm-layanan').value;
+            const qty = parseInt(document.getElementById('smm-qty').value) || 0;
+            const harga = SMM_PRICE_LIST[layanan].prices[qty] || 0;
+            document.getElementById('smm-total').innerText = `Rp ${harga.toLocaleString('id-ID')}`;
+        }
+
+        window.processSmmOrder = function(e) {
+            e.preventDefault();
+            const layananKey = document.getElementById('smm-layanan').value;
+            const layanan = SMM_PRICE_LIST[layananKey].name;
+            const target = document.getElementById('smm-target').value;
+            const qty = document.getElementById('smm-qty').value;
+            const total = document.getElementById('smm-total').innerText;
+            const bayar = document.getElementById('smm-bayar').value;
+
+            if(!target ||!qty) { alert("Link/Username Target & Jumlah wajib diisi"); return; }
+
+            const message = `Halo Admin PulzzStore!\nSaya mau order Suntik Sosmed:\n\n*Layanan:* ${layanan}\n*Target:* ${target}\n*Jumlah:* ${parseInt(qty).toLocaleString('id-ID')}\n*Total:* ${total}\n*Bayar via:* ${bayar}\n\nMohon diproses min!`;
+            window.open(`https://wa.me/${ADMIN_WA}?text=${encodeURIComponent(message)}`, '_blank');
+        }
+
+        document.addEventListener('DOMContentLoaded', initApp);
+    </script>
+</body>
+</html>
