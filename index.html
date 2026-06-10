@@ -565,26 +565,22 @@
         </nav>
 
     <!-- TAMBAHIN WRAPPER INI BIAR RAPAT -->
-    <main class="pt-2"> <!-- pt-2 = jarak 8px dari navbar, udah mefet -->
+    <main class="pt-2"> 
 
-        <!-- TAMBAHIN PAGE DEFAULT AKTIF BIAR GAK KOSONG -->
         <div id="landing" class="page-view active" style="display:block; opacity:1;">
             <div class="max-w-7xl mx-auto px-4 py-4">
-                <!-- Isi Katalog Akun Game Premium lu taro di sini -->
-                <!-- Contoh: -->
                 <div class="card-premium p-5 mb-3">
                     <h2 class="text-xl font-bold text-white">Katalog Akun Game</h2>
                 </div>
             </div>
         </div>
 
-        <!-- Page lain lu taro di bawah ini -->
         <div id="catalog" class="page-view">
            ...
         </div>
 
     </main> <!-- TUTUP WRAPPER -->
-
+    
     <!-- LOGIN MODAL -->
     <div id="login-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4">
         <div class="modal-backdrop absolute inset-0" onclick="closeLoginModal()"></div>
@@ -607,7 +603,7 @@
     </div>
 
     <!-- LANDING PAGE -->
-    <main id="view-landing" class="page-view min-h-[calc(100vh-80px)] flex items-center justify-center px-4 py-12">
+    <main id="view-landing" class="page-view active pt-4 px-4 py-6">
         <div class="max-w-5xl w-full">
             <div class="text-center mb-16">
                 <h2 class="text-4xl md:text-6xl font-black text-white mb-4 leading-tight">
@@ -618,7 +614,7 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
                 <!-- Game Accounts Hero Card -->
-                <div onclick="navigateTo('home')" class="hero-card group">
+                <div onclick="navigateTo('smm')" class="hero-card group">
                     <div class="hero-icon text-blue-500">
                         <i class="fas fa-gamepad"></i>
                     </div>
@@ -653,7 +649,7 @@
 
     <!-- HOME / CATALOG PAGE -->
     <main id="view-home" class="page-view max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-        <button onclick="navigateTo('landing')" class="mb-8 text-gray-400 hover:text-white flex items-center gap-2 transition-colors font-semibold group">
+        <button onclick="navigateTo('view-landing')" class="mb-8 text-gray-400 hover:text-white...
             <div class="w-9 h-9 rounded-lg bg-dark-800 border border-dark-border flex items-center justify-center group-hover:bg-dark-700 group-hover:border-cyan-500/50 transition-all">
                 <i class="fas fa-arrow-left text-sm"></i>
             </div>
@@ -751,7 +747,7 @@
 
     <!-- SMM ORDER PAGE -->
     <main id="view-smm" class="page-view w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-        <button onclick="navigateTo('landing')" class="mb-8 text-gray-400 hover:text-white flex items-center gap-2 transition-colors font-semibold group">
+        <button onclick="navigateTo('view-landing')" class="mb-8 text-gray-400 hover:text-white...
             <div class="w-9 h-9 rounded-lg bg-dark-800 border border-dark-border flex items-center justify-center group-hover:bg-dark-700 group-hover:border-cyan-500/50">
                 <i class="fas fa-arrow-left text-sm"></i>
             </div>
@@ -818,7 +814,7 @@
     </main>
 
     <!-- ADMIN DASHBOARD PAGE -->
-    <main id="view-admin" class="page-view max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <button onclick="navigateTo('view-home')" class="btn-secondary px-6 py-2.5...
         <!-- HEADER -->
         <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-10">
             <div>
