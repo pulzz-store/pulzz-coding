@@ -1251,6 +1251,55 @@
             window.open(lynkUrl, '_blank');
         }
 
+        let pendingLynkUrl = ''; // buat nyimpen link sementara
+
+function handleOrder(service, qty) {
+    const url = LYNK_PRODUCT_MAP[service]?.[qty];
+    if (!url) {
+        alert('Link produk belum disetting!');
+        return;
+    }
+
+    // Layanan IG wajib lewat konfirmasi dulu
+    const igServices = ['follower-ig', 'follower-ig-indo', 'like-ig', 'view-ig'];
+
+    if (igServices.includes(service)) {
+        pendingLynkUrl = url; // simpen link nya
+        document.getElementById('igConfirmModal').classList.add('active');
+        // reset checkbox
+        document.getElementById('checkPublik').checked = false;
+        document.getElementById('checkLaporan').checked = false;
+        toggleLanjutBtn();
+    } else {
+        // Layanan WA langsung gas ke Lynk
+        window.open(url, '_blank');
+    }
+}
+
+function closeIgModal() {
+    document.getElementById('igConfirmModal').classList.remove('active');
+    pendingLynkUrl = '';
+}
+
+function toggleLanjutBtn() {
+    const c1 = document.getElementById('checkPublik').checked;
+    const c2 = document.getElementById('checkLaporan').checked;
+    const btn = document.getElementById('btnLanjutIg');
+    btn.disabled =!(c1 && c2);
+}
+
+function goToLynk() {
+    if (pendingLynkUrl) {
+        window.open(pendingLynkUrl, '_blank');
+        closeIgModal();
+    }
+}
+
+// Tutup modal kalo klik area luar
+document.getElementById('igConfirmModal').addEventListener('click', function(e) {
+    if (e.target === this) closeIgModal();
+});
+
         document.addEventListener('DOMContentLoaded', initApp);
         navigateTo('view-landing');
     </script>
