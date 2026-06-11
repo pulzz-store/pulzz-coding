@@ -1,110 +1,110 @@
 import nodemailer from 'nodemailer';
 
 export default async function handler(req, res) {
-  if (req.method!== 'POST') return res.status(405).json({ error: 'Method Not Allowed' });
+  if (req.method !== 'POST') return res.status(405).json({ error: 'Method Not Allowed' });
 
   try {
     const { event, data } = req.body;
 
-    if (event!== 'order.paid') {
+    if (event !== 'order.paid') {
       return res.status(200).json({ status: 'ignored', msg: 'Bukan order.paid' });
     }
 
-    // 1. Ambil data dari Lynk
-    const product_sku = data.product.sku; // INI KUNCINYA, BUKAN DARI ANSWERS[1]
+    // 1. Ambil data dasar dari webhook Lynk
     const answers = data.answers || [];
-    const target = answers[0]?.answer; // Urutan 1=Username/ID
-    const quantity = answers[2]?.answer || 1; // Urutan 3=Jumlah
+    const target = answers[0]?.answer; // Mengambil jawaban kolom pertama form Lynk (Username/Link)
 
     const buyerEmail = data.customer.email;
     const buyerName = data.customer.name;
     const productName = data.product.name;
     const invoiceId = data.id;
 
-    if (!product_sku ||!target ||!quantity) {
-      console.log('Gagal: Data kosong', { product_sku, target, quantity, answers });
-      return res.status(400).json({ status: 'error', msg: 'Data checkout kosong' });
-    }
+    // 2. MAPPING NAMA PRODUK LYNK -> PROVIDER + KODE SERVICE + JUMLAH PAKET
+    const MAP_BY_NAME = {
+        // PENGIKUT SALURAN WA - Provider Medanpedia, Service 5519
+        '100 Pengikut Saluran WA': {provider: 'medanpedia', service: '5519', qty: 100},
+        '200 Pengikut Saluran WA': {provider: 'medanpedia', service: '5519', qty: 200},
+        '300 Pengikut Saluran WA': {provider: 'medanpedia', service: '5519', qty: 300},
+        '400 Pengikut Saluran WA': {provider: 'medanpedia', service: '5519', qty: 400},
+        '500 Pengikut Saluran WA': {provider: 'medanpedia', service: '5519', qty: 500},
+        '600 Pengikut Saluran WA': {provider: 'medanpedia', service: '5519', qty: 600},
+        '700 Pengikut Saluran WA': {provider: 'medanpedia', service: '5519', qty: 700},
+        '800 Pengikut Saluran WA': {provider: 'medanpedia', service: '5519', qty: 800},
+        '900 Pengikut Saluran WA': {provider: 'medanpedia', service: '5519', qty: 900},
+        '1000 Pengikut Saluran WA': {provider: 'medanpedia', service: '5519', qty: 1000},
 
-    // 2. MAPPING NAMA PRODUK LYNK -> PROVIDER + KODE
-// HARUS SAMA PERSIS sama nama produk di dashboard Lynk lu, termasuk spasi & huruf besar kecil
-const MAP_BY_NAME = {
-    // PENGIKUT SALURAN WA - Provider Medan, Service 5519
-    '100 Pengikut Saluran WA': {provider: 'medan', service: '5519'},
-    '200 Pengikut Saluran WA': {provider: 'medan', service: '5519'},
-    '300 Pengikut Saluran WA': {provider: 'medan', service: '5519'},
-    '400 Pengikut Saluran WA': {provider: 'medan', service: '5519'},
-    '500 Pengikut Saluran WA': {provider: 'medan', service: '5519'},
-    '600 Pengikut Saluran WA': {provider: 'medan', service: '5519'},
-    '700 Pengikut Saluran WA': {provider: 'medan', service: '5519'},
-    '800 Pengikut Saluran WA': {provider: 'medan', service: '5519'},
-    '900 Pengikut Saluran WA': {provider: 'medan', service: '5519'},
-    '1000 Pengikut Saluran WA': {provider: 'medan', service: '5519'},
+        // VIEWS INSTAGRAM - Provider Indosmm, Service 6035
+        '5000 Views Instagram': {provider: 'indosmm', service: '6035', qty: 5000},
+        '6500 Views Instagram': {provider: 'indosmm', service: '6035', qty: 6500},
+        '8000 Views Instagram': {provider: 'indosmm', service: '6035', qty: 8000},
+        '9500 Views Instagram': {provider: 'indosmm', service: '6035', qty: 9500},
+        '11000 Views Instagram': {provider: 'indosmm', service: '6035', qty: 11000},
+        '12500 Views Instagram': {provider: 'indosmm', service: '6035', qty: 12500},
+        '14000 Views Instagram': {provider: 'indosmm', service: '6035', qty: 14000},
+        '15500 Views Instagram': {provider: 'indosmm', service: '6035', qty: 15500},
+        '17000 Views Instagram': {provider: 'indosmm', service: '6035', qty: 17000},
+        '20000 Views Instagram': {provider: 'indosmm', service: '6035', qty: 20000},
 
-    // VIEWS INSTAGRAM - Provider Indosmm, Service 6035
-    '5000 Views Instagram': {provider: 'indosmm', service: '6035'},
-    '6500 Views Instagram': {provider: 'indosmm', service: '6035'},
-    '8000 Views Instagram': {provider: 'indosmm', service: '6035'},
-    '9500 Views Instagram': {provider: 'indosmm', service: '6035'},
-    '11000 Views Instagram': {provider: 'indosmm', service: '6035'},
-    '12500 Views Instagram': {provider: 'indosmm', service: '6035'},
-    '14000 Views Instagram': {provider: 'indosmm', service: '6035'},
-    '15500 Views Instagram': {provider: 'indosmm', service: '6035'},
-    '17000 Views Instagram': {provider: 'indosmm', service: '6035'},
-    '20000 Views Instagram': {provider: 'indosmm', service: '6035'},
+        // LIKE INSTAGRAM - Provider Indosmm, Service 7242
+        '200 Like Instagram': {provider: 'indosmm', service: '7242', qty: 200},
+        '300 Like Instagram': {provider: 'indosmm', service: '7242', qty: 300},
+        '400 Like Instagram': {provider: 'indosmm', service: '7242', qty: 400},
+        '500 Like Instagram': {provider: 'indosmm', service: '7242', qty: 500},
+        '600 Like Instagram': {provider: 'indosmm', service: '7242', qty: 600},
+        '700 Like Instagram': {provider: 'indosmm', service: '7242', qty: 700},
+        '800 Like Instagram': {provider: 'indosmm', service: '7242', qty: 800},
+        '900 Like Instagram': {provider: 'indosmm', service: '7242', qty: 900},
+        '1000 Like Instagram': {provider: 'indosmm', service: '7242', qty: 1000},
+        '1200 Like Instagram': {provider: 'indosmm', service: '7242', qty: 1200},
 
-    // LIKE INSTAGRAM - Provider Indosmm, Service 7242
-    '200 Like Instagram': {provider: 'indosmm', service: '7242'},
-    '300 Like Instagram': {provider: 'indosmm', service: '7242'},
-    '400 Like Instagram': {provider: 'indosmm', service: '7242'},
-    '500 Like Instagram': {provider: 'indosmm', service: '7242'},
-    '600 Like Instagram': {provider: 'indosmm', service: '7242'},
-    '700 Like Instagram': {provider: 'indosmm', service: '7242'},
-    '800 Like Instagram': {provider: 'indosmm', service: '7242'},
-    '900 Like Instagram': {provider: 'indosmm', service: '7242'},
-    '1000 Like Instagram': {provider: 'indosmm', service: '7242'},
-    '1200 Like Instagram': {provider: 'indosmm', service: '7242'},
+        // FOLLOWERS IG INDO - Provider Indosmm, Service 574
+        '100 Followers IG Indo': {provider: 'indosmm', service: '574', qty: 100},
+        '200 Followers IG Indo': {provider: 'indosmm', service: '574', qty: 200},
+        '300 Followers IG Indo': {provider: 'indosmm', service: '574', qty: 300},
+        '400 Followers IG Indo': {provider: 'indosmm', service: '574', qty: 400},
+        '500 Followers IG Indo': {provider: 'indosmm', service: '574', qty: 500},
+        '600 Followers IG Indo': {provider: 'indosmm', service: '574', qty: 600},
+        '700 Followers IG Indo': {provider: 'indosmm', service: '574', qty: 700},
+        '800 Followers IG Indo': {provider: 'indosmm', service: '574', qty: 800},
+        '900 Followers IG Indo': {provider: 'indosmm', service: '574', qty: 900},
+        '1000 Followers IG Indo': {provider: 'indosmm', service: '574', qty: 1000},
 
-    // FOLLOWERS IG INDO - Provider Indosmm, Service 574
-    '100 Followers IG Indo': {provider: 'indosmm', service: '574'},
-    '200 Followers IG Indo': {provider: 'indosmm', service: '574'},
-    '300 Followers IG Indo': {provider: 'indosmm', service: '574'},
-    '400 Followers IG Indo': {provider: 'indosmm', service: '574'},
-    '500 Followers IG Indo': {provider: 'indosmm', service: '574'},
-    '600 Followers IG Indo': {provider: 'indosmm', service: '574'},
-    '700 Followers IG Indo': {provider: 'indosmm', service: '574'},
-    '800 Followers IG Indo': {provider: 'indosmm', service: '574'},
-    '900 Followers IG Indo': {provider: 'indosmm', service: '574'},
-    '1000 Followers IG Indo': {provider: 'indosmm', service: '574'},
-
-    // FOLLOWERS INSTAGRAM - Provider Indosmm, Service 8303
-    '100 Followers Instagram': {provider: 'indosmm', service: '8303'},
-    '200 Followers Instagram': {provider: 'indosmm', service: '8303'},
-    '300 Followers Instagram': {provider: 'indosmm', service: '8303'},
-    '400 Followers Instagram': {provider: 'indosmm', service: '8303'},
-    '500 Followers Instagram': {provider: 'indosmm', service: '8303'},
-    '600 Followers Instagram': {provider: 'indosmm', service: '8303'},
-    '700 Followers Instagram': {provider: 'indosmm', service: '8303'},
-    '800 Followers Instagram': {provider: 'indosmm', service: '8303'},
-    '900 Followers Instagram': {provider: 'indosmm', service: '8303'},
-    '1000 Followers Instagram': {provider: 'indosmm', service: '8303'},
-};
+        // FOLLOWERS INSTAGRAM - Provider Indosmm, Service 8303
+        '100 Followers Instagram': {provider: 'indosmm', service: '8303', qty: 100},
+        '200 Followers Instagram': {provider: 'indosmm', service: '8303', qty: 200},
+        '300 Followers Instagram': {provider: 'indosmm', service: '8303', qty: 300},
+        '400 Followers Instagram': {provider: 'indosmm', service: '8303', qty: 400},
+        '500 Followers Instagram': {provider: 'indosmm', service: '8303', qty: 500},
+        '600 Followers Instagram': {provider: 'indosmm', service: '8303', qty: 600},
+        '700 Followers Instagram': {provider: 'indosmm', service: '8303', qty: 700},
+        '800 Followers Instagram': {provider: 'indosmm', service: '8303', qty: 800},
+        '900 Followers Instagram': {provider: 'indosmm', service: '8303', qty: 900},
+        '1000 Followers Instagram': {provider: 'indosmm', service: '8303', qty: 1000},
+    };
     
-    const mapData = MAP_SERVICE[product_sku];
+    // Cari kecocokan data berdasarkan nama produk di Lynk
+    const mapData = MAP_BY_NAME[productName];
     if (!mapData) {
-      throw new Error(`SKU Lynk "${product_sku}" belum ada di MAP_SERVICE. Tambahin dulu.`);
+      throw new Error(`Nama produk Lynk "${productName}" belum terdaftar di MAP_BY_NAME.`);
     }
 
     const provider = mapData.provider;
     const serviceId = mapData.service;
+    const quantity = mapData.qty;
+
+    if (!target || !quantity) {
+      console.log('Gagal: Target atau quantity kosong', { target, quantity });
+      return res.status(400).json({ status: 'error', msg: 'Data target pengiriman kosong' });
+    }
+
     const domain = `https://${req.headers.host}`;
     let apiEndpoint, form = new URLSearchParams();
     let panelResult;
 
-    // 3. Kirim order ke Provider yg bener
+    // 3. Teruskan data order ke endpoint API internal PHP
     if (provider === 'indosmm') {
       const INDOSMM_KEY = process.env.INDOSMM_KEY;
-      if (!INDOSMM_KEY) throw new Error('INDOSMM_KEY kosong di Vercel Env');
+      if (!INDOSMM_KEY) throw new Error('INDOSMM_KEY belum diisi di Environment Variables Vercel');
 
       apiEndpoint = `${domain}/api/api.php`;
       form.append('key', INDOSMM_KEY);
@@ -116,7 +116,7 @@ const MAP_BY_NAME = {
     } else if (provider === 'medanpedia') {
       const MEDAN_API_ID = process.env.MEDAN_API_ID;
       const MEDAN_API_KEY = process.env.MEDAN_API_KEY;
-      if (!MEDAN_API_ID ||!MEDAN_API_KEY) throw new Error('MEDAN_API_ID/KEY kosong di Vercel Env');
+      if (!MEDAN_API_ID || !MEDAN_API_KEY) throw new Error('Variabel MEDAN_API belum diisi di Vercel');
 
       apiEndpoint = `${domain}/api/api-medan.php`;
       form.append('action', 'order');
@@ -125,41 +125,46 @@ const MAP_BY_NAME = {
       form.append('service', serviceId);
       form.append('target', target);
       form.append('quantity', quantity);
-      form.append('username', target); // Medan wajib username
     } else {
-      throw new Error('Provider tidak dikenal');
+      throw new Error('Sistem mendeteksi nama provider yang tidak valid');
     }
 
+    // Eksekusi post data ke server php
     panelResult = await fetch(apiEndpoint, { method: 'POST', body: form }).then(r => r.json());
 
-    // 4. Kirim Email ke Buyer pake Gmail - PENGGANTI FONNTE
+    // 4. Kirim email bukti lunas otomatis ke pembeli menggunakan Gmail
     const GMAIL_USER = process.env.GMAIL_USER;
     const GMAIL_PASS = process.env.GMAIL_PASS;
-    if (!GMAIL_USER ||!GMAIL_PASS) throw new Error('GMAIL_USER/PASS kosong di Vercel Env');
+    if (!GMAIL_USER || !GMAIL_PASS) throw new Error('GMAIL_USER/PASS belum diatur di Vercel');
 
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: { user: GMAIL_USER, pass: GMAIL_PASS }
     });
 
-    const statusMsg = panelResult?.status === 'success' || panelResult?.success === true
-     ? `Sedang diproses. ID Provider: ${panelResult.data?.order_id || panelResult.order_id || 'N/A'}`
-      : `Gagal: ${panelResult?.msg || panelResult?.error || 'Cek manual'}`;
+    const isSuccess = panelResult?.status === 'success' || panelResult?.success === true || panelResult?.status === true;
+    const statusMsg = isSuccess
+      ? `Sedang diproses sistem. ID Pesanan: ${panelResult.data?.id || panelResult.id || 'N/A'}`
+      : `Gagal mengirim otomatis: ${panelResult?.msg || panelResult?.error || 'Silakan hubungi admin'}`;
 
     await transporter.sendMail({
       from: `"PulzzStore" <${GMAIL_USER}>`,
       to: buyerEmail,
-      subject: `Order Lunas - ${invoiceId}`,
+      subject: `[LUNAS] Nota Pesanan Anda - ${invoiceId}`,
       html: `
         <h3>Halo ${buyerName}!</h3>
-        <p>Pembayaran order <b>${invoiceId}</b> sudah lunas ✅</p>
-        <p><b>Produk:</b> ${productName}</p>
-        <p><b>Target:</b> ${target}</p>
-        <p><b>Jumlah:</b> ${quantity}</p>
-        <p><b>Provider:</b> ${provider}</p>
-        <p><b>Status:</b> ${statusMsg}</p>
+        <p>Pembayaran untuk order <b>${invoiceId}</b> telah kami terima dan dikonfirmasi lunas ✅</p>
+        <hr/>
+        <p><b>Rincian Pesanan:</b></p>
+        <ul>
+          <li><b>Produk Layanan:</b> ${productName}</li>
+          <li><b>Target Akun:</b> ${target}</li>
+          <li><b>Kuantitas/Jumlah:</b> ${quantity}</li>
+          <li><b>Rute Server:</b> ${provider.toUpperCase()}</li>
+        </ul>
+        <p><b>Status Sistem SMM:</b> <br> <code style="background:#f4f4f4; padding:5px; display:inline-block;">${statusMsg}</code></p>
         <br>
-        <p>Terima kasih sudah order di PulzzStore 🙏</p>
+        <p>Terima kasih telah berbelanja layanan premium di PulzzStore!</p>
       `
     });
 
@@ -167,7 +172,7 @@ const MAP_BY_NAME = {
 
   } catch (e) {
     console.error('Error Callback:', e);
-    // Kirim email error ke admin juga boleh
     return res.status(500).json({ error: e.message });
   }
-}
+          }
+      
