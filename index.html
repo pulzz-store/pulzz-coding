@@ -594,7 +594,7 @@
     </main>
 
     <main id="view-smm" class="page-view w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-        <button onclick="navigateTo('landing')" class="mb-8 text-gray-400 hover:text-white flex items-center gap-2 transition-colors font-semibold group">
+        <button onclick="window.navigateTo('landing')" class="mb-8 text-gray-400 hover:text-white flex items-center gap-2 transition-colors font-semibold group">
             <div class="w-9 h-9 rounded-lg bg-dark-800 border-dark-border flex items-center justify-center group-hover:bg-dark-700 group-hover:border-cyan-500/50">
                 <i class="fas fa-arrow-left text-sm"></i>
             </div>
@@ -610,13 +610,13 @@
                 <div>
                     <label class="block text-sm font-bold text-gray-300 mb-2.5">Pilih Layanan</label>
                     <div class="custom-select" id="smm-layanan-wrap">
-                        <div class="select-selected" onclick="toggleDropdown('smm-layanan')">Follower Instagram</div>
-                        <div class="select-items select-hide">
-                            <div data-value="follower-ig" onclick="selectOption('smm-layanan', 'follower-ig', 'Follower Instagram')">Follower Instagram</div>
-                            <div data-value="follower-ig-indo" onclick="selectOption('smm-layanan', 'follower-ig-indo', 'Follower IG Indo')">Follower IG Indo</div>
-                            <div data-value="like-ig" onclick="selectOption('smm-layanan', 'like-ig', 'Like Instagram')">Like Instagram</div>
-                            <div data-value="view-ig" onclick="selectOption('smm-layanan', 'view-ig', 'View Instagram')">View Instagram</div>
-                            <div data-value="pengikut-channel" onclick="selectOption('smm-layanan', 'pengikut-channel', 'Pengikut WA Channel')">Pengikut WA Channel</div>
+                        <div class="select-selected" onclick="window.toggleDropdown('smm-layanan')">Follower Instagram</div>
+                        <div class="select-items select-hide" id="smm-layanan-items">
+                            <div data-value="follower-ig" onclick="window.selectOption('smm-layanan', 'follower-ig', 'Follower Instagram')">Follower Instagram</div>
+                            <div data-value="follower-ig-indo" onclick="window.selectOption('smm-layanan', 'follower-ig-indo', 'Follower IG Indo')">Follower IG Indo</div>
+                            <div data-value="like-ig" onclick="window.selectOption('smm-layanan', 'like-ig', 'Like Instagram')">Like Instagram</div>
+                            <div data-value="view-ig" onclick="window.selectOption('smm-layanan', 'view-ig', 'View Instagram')">View Instagram</div>
+                            <div data-value="pengikut-channel" onclick="window.selectOption('smm-layanan', 'pengikut-channel', 'Pengikut WA Channel')">Pengikut WA Channel</div>
                         </div>
                         <input type="hidden" id="smm-layanan" name="smm-layanan" value="follower-ig">
                     </div>
@@ -630,7 +630,7 @@
                 <div>
                     <label class="block text-sm font-bold text-gray-300 mb-2.5">Jumlah</label>
                     <div class="custom-select" id="smm-qty-wrap">
-                        <div class="select-selected" onclick="toggleDropdown('smm-qty')">Pilih Jumlah</div>
+                        <div class="select-selected" onclick="window.toggleDropdown('smm-qty')">Pilih Jumlah</div>
                         <div class="select-items select-hide" id="smm-qty-items"></div>
                         <input type="hidden" id="smm-qty" name="smm-qty" value="">
                     </div>
@@ -644,10 +644,10 @@
                 <div>
                     <label class="block text-sm font-bold text-gray-300 mb-2.5">Metode Pembayaran</label>
                     <div class="custom-select" id="smm-bayar-wrap">
-                        <div class="select-selected" onclick="toggleDropdown('smm-bayar')">QRIS</div>
-                        <div class="select-items select-hide">
-                            <div data-value="QRIS" onclick="selectOption('smm-bayar', 'QRIS', 'QRIS')">💳 QRIS</div>
-                            <div data-value="DANA" onclick="selectOption('smm-bayar', 'DANA', 'DANA')">💰 DANA</div>
+                        <div class="select-selected" onclick="window.toggleDropdown('smm-bayar')">QRIS</div>
+                        <div class="select-items select-hide" id="smm-bayar-items">
+                            <div data-value="QRIS" onclick="window.selectOption('smm-bayar', 'QRIS', '💳 QRIS')">💳 QRIS</div>
+                            <div data-value="DANA" onclick="window.selectOption('smm-bayar', 'DANA', '💰 DANA')">💰 DANA</div>
                         </div>
                         <input type="hidden" id="smm-bayar" name="smm-bayar" value="QRIS">
                     </div>
@@ -657,6 +657,57 @@
                     ORDER 
                 </button>
             </form>
+
+            <!-- PERINGATAN WAJIB SEBELUM ORDER IG - TULISAN JELAS -->
+            <div class="mt-8 bg-gradient-to-br from-red-950/80 to-red-900/60 border-2 border-red-500 rounded-2xl p-6 shadow-lg shadow-red-500/20">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-10 h-10 bg-red-500 rounded-full flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-exclamation-triangle text-white text-xl"></i>
+                    </div>
+                    <h4 class="text-xl font-black text-red-300 uppercase tracking-wide">
+                        WAJIB DILAKUKAN SEBELUM ORDER IG:
+                    </h4>
+                </div>
+
+                <ul class="space-y-3 text-base">
+                    <li class="flex items-start gap-3 bg-dark-900/50 p-3 rounded-lg border-red-500/30">
+                        <i class="fas fa-times-circle text-red-400 text-lg mt-0.5"></i>
+                        <span class="text-gray-100 font-semibold">Akun Instagram <span class="text-red-400 text-lg">JANGAN di Privasi/Private</span></span>
+                    </li>
+                    <li class="flex items-start gap-3 bg-dark-900/50 p-3 rounded-lg border-red-500/30">
+                        <i class="fas fa-times-circle text-red-400 text-lg mt-0.5"></i>
+                        <span class="text-gray-100 font-semibold">Non-aktifkan <span class="text-red-400 text-lg">`Laporan untuk ditinjau`</span></span>
+                    </li>
+                    <li class="flex items-start gap-3 bg-dark-900/50 p-3 rounded-lg border-red-500/30">
+                        <i class="fas fa-times-circle text-red-400 text-lg mt-0.5"></i>
+                        <span class="text-gray-100 font-semibold">Matikan <span class="text-red-400 text-lg">`Tempat untuk gambar: Aturan matikan untuk ditinjau`</span></span>
+                    </li>
+                </ul>
+
+                <div class="mt-4 bg-black/40 border-red-500/50 rounded-lg p-3 text-center">
+                    <p class="text-red-300 font-black text-base">
+                        <i class="fas fa-ban mr-2"></i> Jika tidak, order gagal & TIDAK BISA REFUND. <i class="fas fa-ban ml-2"></i>
+                    </p>
+                </div>
+
+                <!-- TEMPAT UNTUK GAMBAR TUTORIAL -->
+                <div class="mt-6">
+                    <h5 class="text-lg font-bold text-white mb-3 flex items-center gap-2">
+                        <i class="fas fa-image text-blue-400"></i> Cara matikan `Laporan untuk ditinjau`
+                    </h5>
+                    <div class="bg-dark-800 border-2 border-dashed border-blue-500/50 rounded-xl p-2">
+                        <img 
+                            src="https://via.placeholder.com/800x600/0D121C/3B82F6?text=Upload+Gambar+Tutorial+Disini" 
+                            alt="Tutorial matikan laporan untuk ditinjau Instagram" 
+                            class="w-full h-auto rounded-lg"
+                            id="tutorial-ig-img"
+                        >
+                    </div>
+                    <p class="text-xs text-gray-400 mt-2 text-center">
+                        *Ganti `src` di kode `<img>` atas pake link gambar tutorial lu
+                    </p>
+                </div>
+            </div>
         </div>
     </main>
 
