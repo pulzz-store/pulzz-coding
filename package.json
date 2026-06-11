@@ -1,7 +1,8 @@
 {
-  "functions": {
-    "api/*.php": {
-      "runtime": "@vercel/php"
-    }
+  "name": "pulzz-coding",
+  "version": "1.0.0",
+  "type": "module",
+  "dependencies": {
+    "nodemailer": "^6.9.1"
   }
 }
