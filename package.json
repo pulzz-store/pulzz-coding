@@ -3,11 +3,5 @@
     "api/*.php": {
       "runtime": "@vercel/php"
     }
-  },
-  "rewrites": [
-    {
-      "source": "/api/lynk-callback",
-      "destination": "/api/lynk-callback.js"
-    }
-  ]
+  }
 }
