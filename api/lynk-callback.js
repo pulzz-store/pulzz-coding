@@ -108,7 +108,6 @@ export default async function handler(req, res) {
     let apiEndpoint;
     let form = new URLSearchParams();
 
-    // UPDATE JALUR: Dialihkan langsung ke hosting PHP InfinityFree lo biar gak kena blokir
     if (provider === 'indosmm') {
       const INDOSMM_KEY = process.env.INDOSMM_KEY;
       if (!INDOSMM_KEY) throw new Error('INDOSMM_KEY kosong di Env Vercel!');
@@ -134,7 +133,7 @@ export default async function handler(req, res) {
       form.append('quantity', quantity);
     }
 
-    // Kirim data ke Jembatan PHP InfinityFree
+    // Tembak ke Jembatan PHP InfinityFree
     const panelResponse = await fetch(apiEndpoint, { 
       method: 'POST', 
       body: form.toString(), 
@@ -144,15 +143,17 @@ export default async function handler(req, res) {
       }
     });
     
+    // PERBAIKAN SAKTI: Baca teks mentahnya dulu biar gak crash body consumed!
+    const textResponse = await panelResponse.text();
+    
     let panelResult;
     try {
-      panelResult = await panelResponse.json();
+      panelResult = JSON.parse(textResponse);
     } catch(errJson) {
-      const textError = await panelResponse.text();
-      throw new Error(`PHP InfinityFree merespon teks non-JSON. Isi: ${textError.substring(0, 120)}`);
+      // Jika InfinityFree lo ngeluarin eror HTML/teks, dia bakal dipaksa ngaku di sini!
+      throw new Error(`Balasan InfinityFree bukan JSON. Isi respon asli: ${textResponse.substring(0, 150)}`);
     }
 
-    // Bagian kirim Email lewat Gmail Nodemailer
     const GMAIL_USER = process.env.GMAIL_USER;
     const GMAIL_PASS = process.env.GMAIL_PASS;
 
@@ -178,5 +179,5 @@ export default async function handler(req, res) {
       pesan_paling_akurat: e.message 
     });
   }
-      }
-                                    
+                                    }
+    
