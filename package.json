@@ -2,9 +2,12 @@
   "functions": {
     "api/*.php": {
       "runtime": "@vercel/php"
-    },
-    "api/*.js": {
-      "runtime": "@vercel/nodejs"
     }
-  }
+  },
+  "rewrites": [
+    {
+      "source": "/api/lynk-callback",
+      "destination": "/api/lynk-callback.js"
+    }
+  ]
 }
