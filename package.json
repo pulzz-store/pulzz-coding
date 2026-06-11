@@ -1,8 +1,10 @@
 {
-  "name": "pulzzstore",
-  "version": "1.0.0",
-  "type": "module",
-  "dependencies": {
-    "nodemailer": "^6.9.1"
+  "functions": {
+    "api/*.php": {
+      "runtime": "@vercel/php"
+    },
+    "api/*.js": {
+      "runtime": "@vercel/nodejs"
+    }
   }
 }
