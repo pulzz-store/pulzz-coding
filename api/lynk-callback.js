@@ -1,111 +1,122 @@
 import nodemailer from 'nodemailer';
 
 export default async function handler(req, res) {
-  if (req.method!== 'POST') return res.status(405).end();
+  if (req.method!== 'POST') return res.status(405).json({ error: 'Method Not Allowed' });
 
   try {
     const { event, data } = req.body;
 
-    if (event === 'order.paid') {
-      // 1. Ambil data dari Additional Question Lynk
-      // Urutan: 1=Username, 2=Service ID, 3=Jumlah
-      const answers = data.answers;
-      const target = answers[0]?.answer;
-      const serviceId = answers[1]?.answer;
-      const quantity = answers[2]?.answer;
+    if (event!== 'order.paid') {
+      return res.status(200).json({ status: 'ignored', msg: 'Bukan order.paid' });
+    }
 
-      const buyerEmail = data.customer.email;
-      const buyerName = data.customer.name;
-      const productName = data.product.name;
-      const invoiceId = data.id;
+    // 1. Ambil data dari Lynk
+    const product_sku = data.product.sku; // INI KUNCINYA, BUKAN DARI ANSWERS[1]
+    const answers = data.answers || [];
+    const target = answers[0]?.answer; // Urutan 1=Username/ID
+    const quantity = answers[2]?.answer || 1; // Urutan 3=Jumlah
 
-      if (!serviceId ||!target ||!quantity) {
-        console.log('Gagal: Data kosong', answers);
-        return res.status(400).json({status: 'error', msg: 'Data checkout kosong'});
-      }
+    const buyerEmail = data.customer.email;
+    const buyerName = data.customer.name;
+    const productName = data.product.name;
+    const invoiceId = data.id;
 
-      // 2. Kirim order ke Indosmm lewat api.php
+    if (!product_sku ||!target ||!quantity) {
+      console.log('Gagal: Data kosong', { product_sku, target, quantity, answers });
+      return res.status(400).json({ status: 'error', msg: 'Data checkout kosong' });
+    }
+
+    // 2. MAPPING SKU LYNK -> PROVIDER + KODE SERVICE
+    // GANTI SESUAI SKU LYNK LU. Contoh di bawah
+    const MAP_SERVICE = {
+      // Format: 'SKU_LYNK': {provider: 'indosmm'/'medanpedia', service: 'KODE_PROVIDER'}
+      'ig-followers-indo': { provider: 'indosmm', service: '574' }, // Follower IG Indo
+      'ig-followers': { provider: 'indosmm', service: '8303' }, // Follower Instagram
+      'ig-like': { provider: 'indosmm', service: '7242' }, // Like Instagram
+      'ig-view': { provider: 'indosmm', service: '6035' }, // View Instagram
+      'wa-channel-follow': { provider: 'medanpedia', service: '5519' }, // Pengikut Saluran WA
+
+      // TAMBAHIN PRODUK LU DI SINI
+    };
+
+    const mapData = MAP_SERVICE[product_sku];
+    if (!mapData) {
+      throw new Error(`SKU Lynk "${product_sku}" belum ada di MAP_SERVICE. Tambahin dulu.`);
+    }
+
+    const provider = mapData.provider;
+    const serviceId = mapData.service;
+    const domain = `https://${req.headers.host}`;
+    let apiEndpoint, form = new URLSearchParams();
+    let panelResult;
+
+    // 3. Kirim order ke Provider yg bener
+    if (provider === 'indosmm') {
       const INDOSMM_KEY = process.env.INDOSMM_KEY;
-      const domain = `https://${req.headers.host}`;
+      if (!INDOSMM_KEY) throw new Error('INDOSMM_KEY kosong di Vercel Env');
 
-      const form = new URLSearchParams();
+      apiEndpoint = `${domain}/api/api.php`;
       form.append('key', INDOSMM_KEY);
       form.append('action', 'order');
       form.append('service', serviceId);
       form.append('target', target);
       form.append('quantity', quantity);
 
-      const panelResult = await fetch(`${domain}/api/api.php`, { method: 'POST', body: form }).then(r => r.json());
+    } else if (provider === 'medanpedia') {
+      const MEDAN_API_ID = process.env.MEDAN_API_ID;
+      const MEDAN_API_KEY = process.env.MEDAN_API_KEY;
+      if (!MEDAN_API_ID ||!MEDAN_API_KEY) throw new Error('MEDAN_API_ID/KEY kosong di Vercel Env');
 
-      // 3. Kirim Email ke Buyer pake Gmail - INI PENGGANTI FONNTE
-      const transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-          user: process.env.GMAIL_USER,
-          pass: process.env.GMAIL_PASS
-        }
-      });
-
-      const statusMsg = panelResult?.status === 'success'? 'Sedang diproses' : 'Gagal: ' + (panelResult?.msg || 'Cek manual');
-
-      await transporter.sendMail({
-        from: `"PulzzStore" <${process.env.GMAIL_USER}>`,
-        to: buyerEmail,
-        subject: `Order Lunas - ${invoiceId}`,
-        html: `
-          <h3>Halo ${buyerName}!</h3>
-          <p>Pembayaran order <b>${invoiceId}</b> sudah lunas ✅</p>
-          <p><b>Produk:</b> ${productName}</p>
-          <p><b>Target:</b> ${target}</p>
-          <p><b>Jumlah:</b> ${quantity}</p>
-          <p><b>Status:</b> ${statusMsg}</p>
-          <br>
-          <p>Terima kasih sudah order di PulzzStore 🙏</p>
-        `
-      });
-
-      return res.status(200).json({ status: 'ok', panel: panelResult, email_sent: buyerEmail });
+      apiEndpoint = `${domain}/api/api-medan.php`;
+      form.append('action', 'order');
+      form.append('api_id', MEDAN_API_ID);
+      form.append('api_key', MEDAN_API_KEY);
+      form.append('service', serviceId);
+      form.append('target', target);
+      form.append('quantity', quantity);
+      form.append('username', target); // Medan wajib username
+    } else {
+      throw new Error('Provider tidak dikenal');
     }
 
-    return res.status(200).json({ status: 'ignored' });
+    panelResult = await fetch(apiEndpoint, { method: 'POST', body: form }).then(r => r.json());
+
+    // 4. Kirim Email ke Buyer pake Gmail - PENGGANTI FONNTE
+    const GMAIL_USER = process.env.GMAIL_USER;
+    const GMAIL_PASS = process.env.GMAIL_PASS;
+    if (!GMAIL_USER ||!GMAIL_PASS) throw new Error('GMAIL_USER/PASS kosong di Vercel Env');
+
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: { user: GMAIL_USER, pass: GMAIL_PASS }
+    });
+
+    const statusMsg = panelResult?.status === 'success' || panelResult?.success === true
+     ? `Sedang diproses. ID Provider: ${panelResult.data?.order_id || panelResult.order_id || 'N/A'}`
+      : `Gagal: ${panelResult?.msg || panelResult?.error || 'Cek manual'}`;
+
+    await transporter.sendMail({
+      from: `"PulzzStore" <${GMAIL_USER}>`,
+      to: buyerEmail,
+      subject: `Order Lunas - ${invoiceId}`,
+      html: `
+        <h3>Halo ${buyerName}!</h3>
+        <p>Pembayaran order <b>${invoiceId}</b> sudah lunas ✅</p>
+        <p><b>Produk:</b> ${productName}</p>
+        <p><b>Target:</b> ${target}</p>
+        <p><b>Jumlah:</b> ${quantity}</p>
+        <p><b>Provider:</b> ${provider}</p>
+        <p><b>Status:</b> ${statusMsg}</p>
+        <br>
+        <p>Terima kasih sudah order di PulzzStore 🙏</p>
+      `
+    });
+
+    return res.status(200).json({ status: 'ok', provider, panel: panelResult, email_sent: buyerEmail });
 
   } catch (e) {
     console.error('Error Callback:', e);
+    // Kirim email error ke admin juga boleh
     return res.status(500).json({ error: e.message });
   }
-}        form.append('quantity', quantity);
-
-        panelResult = await fetch(`${domain}/api/api.php`, { method: 'POST', body: form }).then(r => r.json());
-      }
-      // 4. Order ke Medanpedia lewat proxy api-medan.php
-      else if (productName.toLowerCase().includes('medanpedia')) {
-        const form = new URLSearchParams();
-        form.append('action', 'order');
-        form.append('api_key', MEDAN_KEY);
-        form.append('service', serviceId);
-        form.append('target', target);
-        form.append('quantity', quantity);
-
-        panelResult = await fetch(`${domain}/api/api-medan.php`, { method: 'POST', body: form }).then(r => r.json());
-      }
-
-      // 5. Kirim WA ke buyer pake Fonnte
-      const statusMsg = panelResult?.status === 'success' || panelResult?.success === true? 'Sedang diproses' : 'Gagal: ' + (panelResult?.msg || 'Cek manual');
-      const pesan = `Halo ${buyerName}!\n\nOrder ${invoiceId} lunas ✅\nProduk: ${productName}\nStatus: ${statusMsg}`;
-
-      await fetch('https://api.fonnte.com/send', {
-        method: 'POST',
-        headers: { 'Authorization': FONNTE_TOKEN },
-        body: JSON.stringify({ target: buyerPhone, message: pesan })
-      });
-
-      return res.status(200).json({ status: 'ok', panel: panelResult });
-    }
-
-    return res.status(200).json({ status: 'ignored' }); // Kalo bukan event paid, abaikan
-
-  } catch (e) {
-    console.error(e);
-    return res.status(500).json({ error: e.message });
-  }
-        }
+}
