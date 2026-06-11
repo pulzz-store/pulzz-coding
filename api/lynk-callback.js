@@ -26,17 +26,68 @@ export default async function handler(req, res) {
       return res.status(400).json({ status: 'error', msg: 'Data checkout kosong' });
     }
 
-    // 3. MAPPING NAMA PRODUK LYNK -> PROVIDER + KODE
-// Format: 'NAMA PRODUK DI LYNK LU': {provider: 'indosmm'/'medan', service: 'KODE_PROVIDER'}
+    // 2. MAPPING NAMA PRODUK LYNK -> PROVIDER + KODE
+// HARUS SAMA PERSIS sama nama produk di dashboard Lynk lu, termasuk spasi & huruf besar kecil
 const MAP_BY_NAME = {
-    // ISI SESUAI NAMA PRODUK DI DASHBOARD LYNK LU, HARUS SAMA PERSIS
-    'Follower Ig Indo':       {provider: 'indosmm', service: '574'},     // Kode Indosmm
-    'Follower Instagram':     {provider: 'indosmm', service: '8303'},    // Kode Indosmm 
-    'Like Instagram':         {provider: 'indosmm', service: '7242'},    // Kode Indosmm
-    'View Instagram':         {provider: 'indosmm', service: '6035'},    // Kode Indosmm
-    'Pengikut Saluran WA':    {provider: 'medan',   service: '5519'},    // Kode Medanpedia
+    // PENGIKUT SALURAN WA - Provider Medan, Service 5519
+    '100 Pengikut Saluran WA': {provider: 'medan', service: '5519'},
+    '200 Pengikut Saluran WA': {provider: 'medan', service: '5519'},
+    '300 Pengikut Saluran WA': {provider: 'medan', service: '5519'},
+    '400 Pengikut Saluran WA': {provider: 'medan', service: '5519'},
+    '500 Pengikut Saluran WA': {provider: 'medan', service: '5519'},
+    '600 Pengikut Saluran WA': {provider: 'medan', service: '5519'},
+    '700 Pengikut Saluran WA': {provider: 'medan', service: '5519'},
+    '800 Pengikut Saluran WA': {provider: 'medan', service: '5519'},
+    '900 Pengikut Saluran WA': {provider: 'medan', service: '5519'},
+    '1000 Pengikut Saluran WA': {provider: 'medan', service: '5519'},
 
-    // TAMBAHIN LAGI SESUAI NAMA PRODUK LU DI LYNK
+    // VIEWS INSTAGRAM - Provider Indosmm, Service 6035
+    '5000 Views Instagram': {provider: 'indosmm', service: '6035'},
+    '6500 Views Instagram': {provider: 'indosmm', service: '6035'},
+    '8000 Views Instagram': {provider: 'indosmm', service: '6035'},
+    '9500 Views Instagram': {provider: 'indosmm', service: '6035'},
+    '11000 Views Instagram': {provider: 'indosmm', service: '6035'},
+    '12500 Views Instagram': {provider: 'indosmm', service: '6035'},
+    '14000 Views Instagram': {provider: 'indosmm', service: '6035'},
+    '15500 Views Instagram': {provider: 'indosmm', service: '6035'},
+    '17000 Views Instagram': {provider: 'indosmm', service: '6035'},
+    '20000 Views Instagram': {provider: 'indosmm', service: '6035'},
+
+    // LIKE INSTAGRAM - Provider Indosmm, Service 7242
+    '200 Like Instagram': {provider: 'indosmm', service: '7242'},
+    '300 Like Instagram': {provider: 'indosmm', service: '7242'},
+    '400 Like Instagram': {provider: 'indosmm', service: '7242'},
+    '500 Like Instagram': {provider: 'indosmm', service: '7242'},
+    '600 Like Instagram': {provider: 'indosmm', service: '7242'},
+    '700 Like Instagram': {provider: 'indosmm', service: '7242'},
+    '800 Like Instagram': {provider: 'indosmm', service: '7242'},
+    '900 Like Instagram': {provider: 'indosmm', service: '7242'},
+    '1000 Like Instagram': {provider: 'indosmm', service: '7242'},
+    '1200 Like Instagram': {provider: 'indosmm', service: '7242'},
+
+    // FOLLOWERS IG INDO - Provider Indosmm, Service 574
+    '100 Followers IG Indo': {provider: 'indosmm', service: '574'},
+    '200 Followers IG Indo': {provider: 'indosmm', service: '574'},
+    '300 Followers IG Indo': {provider: 'indosmm', service: '574'},
+    '400 Followers IG Indo': {provider: 'indosmm', service: '574'},
+    '500 Followers IG Indo': {provider: 'indosmm', service: '574'},
+    '600 Followers IG Indo': {provider: 'indosmm', service: '574'},
+    '700 Followers IG Indo': {provider: 'indosmm', service: '574'},
+    '800 Followers IG Indo': {provider: 'indosmm', service: '574'},
+    '900 Followers IG Indo': {provider: 'indosmm', service: '574'},
+    '1000 Followers IG Indo': {provider: 'indosmm', service: '574'},
+
+    // FOLLOWERS INSTAGRAM - Provider Indosmm, Service 8303
+    '100 Followers Instagram': {provider: 'indosmm', service: '8303'},
+    '200 Followers Instagram': {provider: 'indosmm', service: '8303'},
+    '300 Followers Instagram': {provider: 'indosmm', service: '8303'},
+    '400 Followers Instagram': {provider: 'indosmm', service: '8303'},
+    '500 Followers Instagram': {provider: 'indosmm', service: '8303'},
+    '600 Followers Instagram': {provider: 'indosmm', service: '8303'},
+    '700 Followers Instagram': {provider: 'indosmm', service: '8303'},
+    '800 Followers Instagram': {provider: 'indosmm', service: '8303'},
+    '900 Followers Instagram': {provider: 'indosmm', service: '8303'},
+    '1000 Followers Instagram': {provider: 'indosmm', service: '8303'},
 };
     
     const mapData = MAP_SERVICE[product_sku];
