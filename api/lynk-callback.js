@@ -94,7 +94,7 @@ export default async function handler(req, res) {
     
     const mapData = MAP_BY_NAME[productName];
     if (!mapData) {
-      return res.status(200).json({ status: 'ignored_error', msg: `Nama produk "${productName}" di Lynk belum kamu daftarkan di kode!` });
+      return res.status(200).json({ status: 'ignored_error', msg: `Nama produk "${productName}" belum terdaftar di kode.` });
     }
 
     const provider = mapData.provider;
@@ -110,7 +110,7 @@ export default async function handler(req, res) {
 
     if (provider === 'indosmm') {
       const INDOSMM_KEY = process.env.INDOSMM_KEY;
-      if (!INDOSMM_KEY) throw new Error('Kamu BELUM ngisi INDOSMM_KEY di Env Vercel!');
+      if (!INDOSMM_KEY) throw new Error('INDOSMM_KEY kosong di Env Vercel!');
 
       apiEndpoint = 'https://indosmm.com/api/v2';
       form.append('key', INDOSMM_KEY);
@@ -122,7 +122,7 @@ export default async function handler(req, res) {
     } else if (provider === 'medanpedia') {
       const MEDAN_API_ID = process.env.MEDAN_API_ID;
       const MEDAN_API_KEY = process.env.MEDAN_API_KEY;
-      if (!MEDAN_API_ID || !MEDAN_API_KEY) throw new Error('Kamu BELUM ngisi MEDAN_API_ID/KEY di Env Vercel!');
+      if (!MEDAN_API_ID || !MEDAN_API_KEY) throw new Error('MEDAN_API_ID/KEY kosong di Env Vercel!');
 
       apiEndpoint = 'https://api.medanpedia.co.id/order';
       form.append('action', 'order');
@@ -133,7 +133,16 @@ export default async function handler(req, res) {
       form.append('quantity', quantity);
     }
 
-    const panelResponse = await fetch(apiEndpoint, { method: 'POST', body: form });
+    // UPDATE BARU: Tambah Headers samaran biar lolos blokir Cloudflare Panel SMM
+    const panelResponse = await fetch(apiEndpoint, { 
+      method: 'POST', 
+      body: form,
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    });
+    
     const panelResult = await panelResponse.json();
 
     const GMAIL_USER = process.env.GMAIL_USER;
@@ -156,8 +165,6 @@ export default async function handler(req, res) {
     return res.status(200).json({ status: 'ok', provider, panel: panelResult });
 
   } catch (e) {
-    // TRIK SUPER: Kita paksa kirim status 200 biar tulisan eror aslinya langsung muncul di dashboard Lynk.id!
     return res.status(200).json({ status: 'error_debug', pesan_paling_akurat: e.message });
   }
-      }
-          
+}
