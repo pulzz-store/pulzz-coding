@@ -26,19 +26,19 @@ export default async function handler(req, res) {
       return res.status(400).json({ status: 'error', msg: 'Data checkout kosong' });
     }
 
-    // 2. MAPPING SKU LYNK -> PROVIDER + KODE SERVICE
-    // GANTI SESUAI SKU LYNK LU. Contoh di bawah
-    const MAP_SERVICE = {
-      // Format: 'SKU_LYNK': {provider: 'indosmm'/'medanpedia', service: 'KODE_PROVIDER'}
-      'ig-followers-indo': { provider: 'indosmm', service: '574' }, // Follower IG Indo
-      'ig-followers': { provider: 'indosmm', service: '8303' }, // Follower Instagram
-      'ig-like': { provider: 'indosmm', service: '7242' }, // Like Instagram
-      'ig-view': { provider: 'indosmm', service: '6035' }, // View Instagram
-      'wa-channel-follow': { provider: 'medanpedia', service: '5519' }, // Pengikut Saluran WA
+    // 3. MAPPING NAMA PRODUK LYNK -> PROVIDER + KODE
+// Format: 'NAMA PRODUK DI LYNK LU': {provider: 'indosmm'/'medan', service: 'KODE_PROVIDER'}
+const MAP_BY_NAME = {
+    // ISI SESUAI NAMA PRODUK DI DASHBOARD LYNK LU, HARUS SAMA PERSIS
+    'Follower Ig Indo':       {provider: 'indosmm', service: '574'},     // Kode Indosmm
+    'Follower Instagram':     {provider: 'indosmm', service: '8303'},    // Kode Indosmm 
+    'Like Instagram':         {provider: 'indosmm', service: '7242'},    // Kode Indosmm
+    'View Instagram':         {provider: 'indosmm', service: '6035'},    // Kode Indosmm
+    'Pengikut Saluran WA':    {provider: 'medan',   service: '5519'},    // Kode Medanpedia
 
-      // TAMBAHIN PRODUK LU DI SINI
-    };
-
+    // TAMBAHIN LAGI SESUAI NAMA PRODUK LU DI LYNK
+};
+    
     const mapData = MAP_SERVICE[product_sku];
     if (!mapData) {
       throw new Error(`SKU Lynk "${product_sku}" belum ada di MAP_SERVICE. Tambahin dulu.`);
