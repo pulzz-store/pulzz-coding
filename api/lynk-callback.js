@@ -9,7 +9,7 @@ export default async function handler(req, res) {
     const eventData = body.data || {};
     const messageData = eventData.message_data || {};
 
-    // 1. Filter hanya memproses jika status lunas
+    // 1. Filter hanya memproses jika status lunas dari Lynk
     if (event !== 'payment.received') {
       return res.status(200).json({ status: 'ignored', msg: 'Bukan event payment.received' });
     }
@@ -35,37 +35,72 @@ export default async function handler(req, res) {
       }
     }
 
-    // 2. MAPPING LAYANAN PULZZ STORE (Sesuai ID Whitelist di Panel Lu)
+    // 2. MAPPING LAYANAN PULZZ STORE (Sesuai ID Whitelist Resmi di Panel Lu)
     const MAP_BY_NAME = {
+        // PENGIKUT SALURAN WA - Provider Medanpedia, Service 5519
         '100 Pengikut Saluran WA': {provider: 'medan', service: '5519', qty: 100},
         '200 Pengikut Saluran WA': {provider: 'medan', service: '5519', qty: 200},
         '300 Pengikut Saluran WA': {provider: 'medan', service: '5519', qty: 300},
         '400 Pengikut Saluran WA': {provider: 'medan', service: '5519', qty: 400},
         '500 Pengikut Saluran WA': {provider: 'medan', service: '5519', qty: 500},
+        '600 Pengikut Saluran WA': {provider: 'medan', service: '5519', qty: 600},
+        '700 Pengikut Saluran WA': {provider: 'medan', service: '5519', qty: 700},
+        '800 Pengikut Saluran WA': {provider: 'medan', service: '5519', qty: 800},
+        '900 Pengikut Saluran WA': {provider: 'medan', service: '5519', qty: 900},
         '1000 Pengikut Saluran WA': {provider: 'medan', service: '5519', qty: 1000},
 
-        '200 Like Instagram': {provider: 'indosmm', service: '5792', qty: 200}, // Sesuai ID Whitelist Panel: 5792
+        // LIKE INSTAGRAM - Provider Indosmm, Service 5792 (FIX Sesuai Panel Lu!)
+        '200 Like Instagram': {provider: 'indosmm', service: '5792', qty: 200},
         '300 Like Instagram': {provider: 'indosmm', service: '5792', qty: 300},
         '400 Like Instagram': {provider: 'indosmm', service: '5792', qty: 400},
         '500 Like Instagram': {provider: 'indosmm', service: '5792', qty: 500},
+        '600 Like Instagram': {provider: 'indosmm', service: '5792', qty: 600},
+        '700 Like Instagram': {provider: 'indosmm', service: '5792', qty: 700},
+        '800 Like Instagram': {provider: 'indosmm', service: '5792', qty: 800},
+        '900 Like Instagram': {provider: 'indosmm', service: '5792', qty: 900},
         '1000 Like Instagram': {provider: 'indosmm', service: '5792', qty: 1000},
+        '1200 Like Instagram': {provider: 'indosmm', service: '5792', qty: 1200},
 
+        // FOLLOWERS IG INDO - Provider Indosmm, Service 574
         '100 Followers IG Indo': {provider: 'indosmm', service: '574', qty: 100},
         '200 Followers IG Indo': {provider: 'indosmm', service: '574', qty: 200},
+        '300 Followers IG Indo': {provider: 'indosmm', service: '574', qty: 300},
+        '400 Followers IG Indo': {provider: 'indosmm', service: '574', qty: 400},
         '500 Followers IG Indo': {provider: 'indosmm', service: '574', qty: 500},
+        '600 Followers IG Indo': {provider: 'indosmm', service: '574', qty: 600},
+        '700 Followers IG Indo': {provider: 'indosmm', service: '574', qty: 700},
+        '800 Followers IG Indo': {provider: 'indosmm', service: '574', qty: 800},
+        '900 Followers IG Indo': {provider: 'indosmm', service: '574', qty: 900},
         '1000 Followers IG Indo': {provider: 'indosmm', service: '574', qty: 1000},
 
+        // FOLLOWERS INSTAGRAM - Provider Indosmm, Service 8303
         '100 Followers Instagram': {provider: 'indosmm', service: '8303', qty: 100},
+        '200 Followers Instagram': {provider: 'indosmm', service: '8303', qty: 200},
+        '300 Followers Instagram': {provider: 'indosmm', service: '8303', qty: 300},
+        '400 Followers Instagram': {provider: 'indosmm', service: '8303', qty: 400},
         '500 Followers Instagram': {provider: 'indosmm', service: '8303', qty: 500},
+        '600 Followers Instagram': {provider: 'indosmm', service: '8303', qty: 600},
+        '700 Followers Instagram': {provider: 'indosmm', service: '8303', qty: 700},
+        '800 Followers Instagram': {provider: 'indosmm', service: '8303', qty: 800},
+        '900 Followers Instagram': {provider: 'indosmm', service: '8303', qty: 900},
         '1000 Followers Instagram': {provider: 'indosmm', service: '8303', qty: 1000},
 
+        // VIEWS INSTAGRAM - Provider Indosmm, Service 6035
         '5000 Views Instagram': {provider: 'indosmm', service: '6035', qty: 5000},
-        '10000 Views Instagram': {provider: 'indosmm', service: '6035', qty: 10000},
+        '6500 Views Instagram': {provider: 'indosmm', service: '6035', qty: 6500},
+        '8000 Views Instagram': {provider: 'indosmm', service: '6035', qty: 8000},
+        '9500 Views Instagram': {provider: 'indosmm', service: '6035', qty: 9500},
+        '11000 Views Instagram': {provider: 'indosmm', service: '6035', qty: 11000},
+        '12500 Views Instagram': {provider: 'indosmm', service: '6035', qty: 12500},
+        '14000 Views Instagram': {provider: 'indosmm', service: '6035', qty: 14000},
+        '15500 Views Instagram': {provider: 'indosmm', service: '6035', qty: 15500},
+        '17000 Views Instagram': {provider: 'indosmm', service: '6035', qty: 17000},
+        '20000 Views Instagram': {provider: 'indosmm', service: '6035', qty: 20000},
     };
     
     const mapData = MAP_BY_NAME[productName];
     if (!mapData) {
-      return res.status(200).json({ status: 'ignored_error', msg: `Produk "${productName}" belum di-mapping di Vercel.` });
+      return res.status(200).json({ status: 'ignored_error', msg: `Nama produk "${productName}" belum terdaftar di Vercel.` });
     }
 
     const provider = mapData.provider;
@@ -79,16 +114,16 @@ export default async function handler(req, res) {
     let apiEndpoint;
     let form = new URLSearchParams();
 
-    // 3. MENYUSUN PARAMETER API ASLI SMM PANEL (Meniru Struktur Perintah Form Panel Lu)
+    // 3. MENYUSUN PARAMETER API ASLI (Meniru Struktur Perintah Form Panel Lu)
     if (provider === 'indosmm') {
       const INDOSMM_KEY = process.env.INDOSMM_KEY;
       if (!INDOSMM_KEY) throw new Error('INDOSMM_KEY belum diisi di Env Vercel');
 
       apiEndpoint = 'https://indosmm.com/api/v2';
       form.append('key', INDOSMM_KEY);
-      form.append('action', 'add'); // Menggunakan 'add' sesuai instruksi panel
+      form.append('action', 'add'); // Pakai 'add' sesuai panel lu
       form.append('service', serviceId);
-      form.append('link', target);   // Indosmm menggunakan parameter 'link'
+      form.append('link', target);   // Indosmm pakai parameter 'link'
       form.append('quantity', String(quantity));
 
     } else if (provider === 'medan') {
@@ -99,19 +134,19 @@ export default async function handler(req, res) {
       apiEndpoint = 'https://api.medanpedia.co.id/order';
       form.append('api_id', MEDAN_API_ID);
       form.append('api_key', MEDAN_API_KEY);
-      form.append('action', 'add'); // Menggunakan 'add' sesuai instruksi panel
+      form.append('action', 'add'); // Pakai 'add' sesuai panel lu
       form.append('service', serviceId);
       form.append('target', target);
       form.append('quantity', String(quantity));
-      form.append('username', target); // Parameter wajib tambahan dari panel lu
+      form.append('username', target); // Wajib diisi sesuai kodingan panel lu
     }
 
-    // 4. Eksekusi Tembak Langsung ke Pusat Server SMM tanpa Jembatan PHP
+    // 4. Eksekusi Tembak Langsung ke Pusat Server SMM tanpa Jembatan PHP InfinityFree
     const panelResponse = await fetch(apiEndpoint, { 
       method: 'POST', 
       body: form.toString(), 
       headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
         'Content-Type': 'application/x-www-form-urlencoded'
       }
     });
@@ -150,5 +185,4 @@ export default async function handler(req, res) {
       pesan_paling_akurat: e.message 
     });
   }
-      }
-      
+          }
