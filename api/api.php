@@ -1,82 +1,77 @@
 <?php
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *'); 
+header('Access-Control-Allow-Methods: POST, GET, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type, Authorization');
+
+// Handle preflight request dari Vercel
+if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+    http_response_code(200);
+    exit();
+}
 
 class Api
 {
-    public $api_url = 'https://indosmm.id/api/v2'; // Dari API Docs lu
-    public $api_key = 'ISI_API_KEY_KAMU_DISINI'; // <- GANTI INI
+    // URL INI YG BENER BUAT INDOSMM
+    public $api_url = 'https://indosmm.com/api'; 
+    public $api_key = ''; // Kosongin, nanti diisi dari POST
 
     public function order($data)
     {
+        // Indosmm pake action=add buat order baru
         $post = array_merge(['key' => $this->api_key, 'action' => 'add'], $data);
-        return json_decode((string)$this->connect($post));
+        return $this->connect($post);
     }
 
     public function status($order_id)
     {
-        return json_decode(
-            $this->connect([
-                'key' => $this->api_key,
-                'action' => 'status',
-                'order' => $order_id
-            ])
-        );
+        return $this->connect([
+            'key' => $this->api_key,
+            'action' => 'status',
+            'order' => $order_id
+        ]);
     }
 
     public function services()
     {
-        return json_decode(
-            $this->connect([
-                'key' => $this->api_key,
-                'action' => 'services',
-            ])
-        );
+        return $this->connect([
+            'key' => $this->api_key,
+            'action' => 'services',
+        ]);
     }
 
     public function balance()
     {
-        return json_decode(
-            $this->connect([
-                'key' => $this->api_key,
-                'action' => 'balance', // Indosmm pake 'balance' bukan 'keseimbangan'
-            ])
-        );
+        return $this->connect([
+            'key' => $this->api_key,
+            'action' => 'balance',
+        ]);
     }
 
     private function connect($post)
     {
-        $_post = [];
-        if (is_array($post)) {
-            foreach ($post as $name => $value) {
-                $_post[] = $name . '=' . urlencode($value);
-            }
-        }
-
         $ch = curl_init($this->api_url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_HEADER, 0);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 30);
-
-        if (is_array($post)) {
-            curl_setopt($ch, CURLOPT_POSTFIELDS, join('&', $_post));
-        }
-        curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0');
+        curl_setopt_array($ch, [
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_POST => true,
+            CURLOPT_POSTFIELDS => http_build_query($post),
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_SSL_VERIFYHOST => false,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_USERAGENT => 'PulzzStore-Bot/1.0'
+        ]);
 
         $result = curl_exec($ch);
-        if (curl_errno($ch) != 0 && empty($result)) {
-            $result = false;
+        if(curl_errno($ch)) {
+            curl_close($ch);
+            return json_encode(['status' => 'error', 'msg' => 'Curl Error: ' . curl_error($ch)]);
         }
         curl_close($ch);
-        return $result;
+        return $result; // Langsung balikin JSON dari Indosmm
     }
 }
 
-// Jembatan: Terima POST dari HTML lu
+// Jembatan: Terima POST dari lynk-callback.js
 $request_data = $_POST;
 
 if (empty($request_data['key']) || empty($request_data['action'])) {
@@ -85,15 +80,15 @@ if (empty($request_data['key']) || empty($request_data['action'])) {
 }
 
 $api = new Api();
-$api->api_key = $request_data['key']; // Ambil key dari HTML, bukan hardcode
+$api->api_key = $request_data['key']; // Ambil key dari lynk-callback.js
 
 $action = $request_data['action'];
 $response = null;
 
 try {
     switch($action) {
-        case 'profile': // HTML lu panggil profile buat cek saldo
         case 'balance': 
+        case 'profile': // Biar cocok kalo ada yg manggil profile
             $response = $api->balance();
             break;
         
@@ -101,8 +96,8 @@ try {
             $response = $api->services();
             break;
 
-        case 'add': // HTML lu panggil add buat order
-        case 'order':
+        case 'order': // Ini yg dipanggil lynk-callback.js
+        case 'add':
             unset($request_data['key'], $request_data['action']);
             $response = $api->order($request_data);
             break;
@@ -112,11 +107,10 @@ try {
             break;
 
         default:
-            $response = ['status' => 'error', 'msg' => 'Action tidak dikenal: ' . $action];
+            $response = json_encode(['status' => 'error', 'msg' => 'Action tidak dikenal: ' . $action]);
     }
 
-    // Kalau class balikin object, encode lagi ke JSON biar HTML lu bisa baca
-    echo json_encode($response);
+    echo $response; // Udah JSON, tinggal echo
 
 } catch (Exception $e) {
     echo json_encode(['status' => 'error', 'msg' => $e->getMessage()]);
