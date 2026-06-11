@@ -1081,36 +1081,62 @@
         }
 
         function renderCatalog() {
-            const grid = document.getElementById('catalog-grid');
-            const empty = document.getElementById('empty-state');
-            if(!grid) return;
-            grid.innerHTML = '';
-            let filtered = currentFilter === 'All'? appData : appData.filter(a => a.category === currentFilter);
-            if(filtered.length === 0) {
-                empty.classList.remove('hidden');
-            } else {
-                empty.classList.add('hidden');
-                filtered.forEach(acc => {
-                    const cover = acc.images[0] || 'https://via.placeholder.com/400/1F2633/3B82F6?text=No+Image';
-                    grid.innerHTML += `<div class="product-card" onclick="window.openDetail('${acc.id}')">
-                        <div class="product-image">
-                            <img src="${cover}" onerror="this.src='https://via.placeholder.com/400/1F2633/3B82F6?text=No+Image'">
-                            <div class="category-badge">${acc.category}</div>
-                            <div class="price-badge">Rp ${acc.price.toLocaleString('id-ID')}</div>
-                        </div>
-                        <div class="p-5">
-                            <h3 class="text-sm font-bold text-gray-100 line-clamp-2 mb-3 group-hover:text-blue-400 transition-colors">${acc.title}</h3>
-                            <div class="flex justify-between items-center mb-3">
-                                <div class="text-xs text-gray-500 font-semibold">ID: ${acc.id}</div>
-                            </div>
-                            <button class="w-full bg-dark-800/50 border-dark-border group-hover:bg-blue-600/20 group-hover:border-blue-500/50 text-gray-400 group-hover:text-blue-300 text-xs font-bold py-2.5 rounded-lg transition-all">
-                                CEK SPESIFIKASI
-                            </button>
-                        </div>
-                    </div>`;
-                });
+    const grid = document.getElementById('catalog-grid');
+    const empty = document.getElementById('empty-state');
+    if(!grid) return;
+    grid.innerHTML = '';
+    let filtered = currentFilter === 'All'? appData : appData.filter(a => a.category === currentFilter);
+    if(filtered.length === 0) {
+        empty.classList.remove('hidden');
+    } else {
+        empty.classList.add('hidden');
+        filtered.forEach(acc => {
+            const cover = acc.images[0] || 'https://via.placeholder.com/400/1F2633/3B82F6?text=No+Image';
+
+            // 1. MAPPING OTOMATIS DARI TITLE
+            let serviceKey = '';
+            let qtyKey = 0;
+            const title = acc.title.toLowerCase();
+
+            if(title.includes('follower ig indo')) {
+                serviceKey = 'follower-ig-indo';
+            } else if(title.includes('follower ig')) {
+                serviceKey = 'follower-ig';
+            } else if(title.includes('like ig')) {
+                serviceKey = 'like-ig';
+            } else if(title.includes('view ig')) {
+                serviceKey = 'view-ig';
+            } else if(title.includes('pengikut channel') || title.includes('follower channel')) {
+                serviceKey = 'pengikut-channel';
             }
-        }
+
+            // Ambil angka dari judul, contoh: "View IG 5000" -> 5000
+            const match = acc.title.match(/\d+/g);
+            if(match) qtyKey = parseInt(match[match.length-1]); // ambil angka terakhir
+
+            grid.innerHTML += `<div class="product-card">
+                <div class="product-image" onclick="window.openDetail('${acc.id}')">
+                    <img src="${cover}" onerror="this.src='https://via.placeholder.com/400/1F2633/3B82F6?text=No+Image'">
+                    <div class="category-badge">${acc.category}</div>
+                    <div class="price-badge">Rp ${acc.price.toLocaleString('id-ID')}</div>
+                </div>
+                <div class="p-5" onclick="window.openDetail('${acc.id}')">
+                    <h3 class="text-sm font-bold text-gray-100 line-clamp-2 mb-3 group-hover:text-blue-400 transition-colors">${acc.title}</h3>
+                    <div class="flex justify-between items-center mb-3">
+                        <div class="text-xs text-gray-500 font-semibold">ID: ${acc.id}</div>
+                    </div>
+                </div>
+                <!-- 2. TOMBOL ORDER BARU -->
+                <div class="p-5 pt-0">
+                    <button onclick="event.stopPropagation(); handleOrder('${serviceKey}', ${qtyKey})"
+                            class="w-full bg-gradient-to-r from-cyan-500 to-blue-500 text-black text-xs font-bold py-2.5 rounded-lg hover:opacity-90 transition-all">
+                        ORDER SEKARANG
+                    </button>
+                </div>
+            </div>`;
+        });
+    }
+}
 
         window.openDetail = function(id) {
             selectedAcc = appData.find(a => a.id === id);
