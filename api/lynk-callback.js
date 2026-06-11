@@ -1,40 +1,79 @@
+import nodemailer from 'nodemailer';
+
 export default async function handler(req, res) {
   if (req.method!== 'POST') return res.status(405).end();
 
   try {
-    const { event, data } = req.body; // Data dari Lynk
+    const { event, data } = req.body;
 
-    if (event === 'order.paid') { // Cuma jalan kalo status Lunas
-      // 1. Ambil data dari Lynk. Kita pake Custom Fields
-      const serviceId = data.custom_fields?.service_id;
-      const target = data.custom_fields?.target;
-      const quantity = data.quantity || 1;
-      const buyerPhone = data.customer.phone;
+    if (event === 'order.paid') {
+      // 1. Ambil data dari Additional Question Lynk
+      // Urutan: 1=Username, 2=Service ID, 3=Jumlah
+      const answers = data.answers;
+      const target = answers[0]?.answer;
+      const serviceId = answers[1]?.answer;
+      const quantity = answers[2]?.answer;
+
+      const buyerEmail = data.customer.email;
       const buyerName = data.customer.name;
       const productName = data.product.name;
       const invoiceId = data.id;
 
-      if (!serviceId ||!target) {
-        console.log('Gagal: service_id atau target kosong');
-        return res.status(400).json({status: 'error', msg: 'Isi service_id & target'});
+      if (!serviceId ||!target ||!quantity) {
+        console.log('Gagal: Data kosong', answers);
+        return res.status(400).json({status: 'error', msg: 'Data checkout kosong'});
       }
 
-      // 2. Ambil API Key dari Vercel - AMAN
+      // 2. Kirim order ke Indosmm lewat api.php
       const INDOSMM_KEY = process.env.INDOSMM_KEY;
-      const MEDAN_KEY = process.env.MEDAN_KEY;
-      const FONNTE_TOKEN = process.env.FONNTE_TOKEN;
-      const domain = `https://${req.headers.host}`; // Auto jadi pulzzstore.vercel.app
+      const domain = `https://${req.headers.host}`;
 
-      let panelResult;
+      const form = new URLSearchParams();
+      form.append('key', INDOSMM_KEY);
+      form.append('action', 'order');
+      form.append('service', serviceId);
+      form.append('target', target);
+      form.append('quantity', quantity);
 
-      // 3. Order ke Indosmm lewat proxy api.php
-      if (productName.toLowerCase().includes('indosmm')) {
-        const form = new URLSearchParams();
-        form.append('key', INDOSMM_KEY);
-        form.append('action', 'order');
-        form.append('service', serviceId);
-        form.append('target', target);
-        form.append('quantity', quantity);
+      const panelResult = await fetch(`${domain}/api/api.php`, { method: 'POST', body: form }).then(r => r.json());
+
+      // 3. Kirim Email ke Buyer pake Gmail - INI PENGGANTI FONNTE
+      const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: process.env.GMAIL_USER,
+          pass: process.env.GMAIL_PASS
+        }
+      });
+
+      const statusMsg = panelResult?.status === 'success'? 'Sedang diproses' : 'Gagal: ' + (panelResult?.msg || 'Cek manual');
+
+      await transporter.sendMail({
+        from: `"PulzzStore" <${process.env.GMAIL_USER}>`,
+        to: buyerEmail,
+        subject: `Order Lunas - ${invoiceId}`,
+        html: `
+          <h3>Halo ${buyerName}!</h3>
+          <p>Pembayaran order <b>${invoiceId}</b> sudah lunas ✅</p>
+          <p><b>Produk:</b> ${productName}</p>
+          <p><b>Target:</b> ${target}</p>
+          <p><b>Jumlah:</b> ${quantity}</p>
+          <p><b>Status:</b> ${statusMsg}</p>
+          <br>
+          <p>Terima kasih sudah order di PulzzStore 🙏</p>
+        `
+      });
+
+      return res.status(200).json({ status: 'ok', panel: panelResult, email_sent: buyerEmail });
+    }
+
+    return res.status(200).json({ status: 'ignored' });
+
+  } catch (e) {
+    console.error('Error Callback:', e);
+    return res.status(500).json({ error: e.message });
+  }
+}        form.append('quantity', quantity);
 
         panelResult = await fetch(`${domain}/api/api.php`, { method: 'POST', body: form }).then(r => r.json());
       }
