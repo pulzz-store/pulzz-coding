@@ -108,11 +108,12 @@ export default async function handler(req, res) {
     let apiEndpoint;
     let form = new URLSearchParams();
 
+    // UPDATE JALUR: Dialihkan langsung ke hosting PHP InfinityFree lo biar gak kena blokir
     if (provider === 'indosmm') {
       const INDOSMM_KEY = process.env.INDOSMM_KEY;
       if (!INDOSMM_KEY) throw new Error('INDOSMM_KEY kosong di Env Vercel!');
 
-      apiEndpoint = 'https://indosmm.com/api/v2';
+      apiEndpoint = 'https://pulzzstorepanel.infinityfreeapp.com/api.php';
       form.append('key', INDOSMM_KEY);
       form.append('action', 'order');
       form.append('service', serviceId);
@@ -124,7 +125,7 @@ export default async function handler(req, res) {
       const MEDAN_API_KEY = process.env.MEDAN_API_KEY;
       if (!MEDAN_API_ID || !MEDAN_API_KEY) throw new Error('MEDAN_API_ID/KEY kosong di Env Vercel!');
 
-      apiEndpoint = 'https://api.medanpedia.co.id/order';
+      apiEndpoint = 'https://pulzzstorepanel.infinityfreeapp.com/api-medan.php';
       form.append('action', 'order');
       form.append('api_id', MEDAN_API_ID);
       form.append('api_key', MEDAN_API_KEY);
@@ -133,18 +134,25 @@ export default async function handler(req, res) {
       form.append('quantity', quantity);
     }
 
-    // UPDATE BARU: Tambah Headers samaran biar lolos blokir Cloudflare Panel SMM
+    // Kirim data ke Jembatan PHP InfinityFree
     const panelResponse = await fetch(apiEndpoint, { 
       method: 'POST', 
-      body: form,
+      body: form.toString(), 
       headers: {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
         'Content-Type': 'application/x-www-form-urlencoded'
       }
     });
     
-    const panelResult = await panelResponse.json();
+    let panelResult;
+    try {
+      panelResult = await panelResponse.json();
+    } catch(errJson) {
+      const textError = await panelResponse.text();
+      throw new Error(`PHP InfinityFree merespon teks non-JSON. Isi: ${textError.substring(0, 120)}`);
+    }
 
+    // Bagian kirim Email lewat Gmail Nodemailer
     const GMAIL_USER = process.env.GMAIL_USER;
     const GMAIL_PASS = process.env.GMAIL_PASS;
 
@@ -165,6 +173,10 @@ export default async function handler(req, res) {
     return res.status(200).json({ status: 'ok', provider, panel: panelResult });
 
   } catch (e) {
-    return res.status(200).json({ status: 'error_debug', pesan_paling_akurat: e.message });
+    return res.status(200).json({ 
+      status: 'error_debug', 
+      pesan_paling_akurat: e.message 
+    });
   }
-}
+      }
+                                    
