@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 class Api
 {
     // URL INI YG BENER BUAT INDOSMM
-    public $api_url = 'https://indosmm.com/api'; 
+    public $api_url = 'https://indosmm.com/api/v2'; 
     public $api_key = ''; // Kosongin, nanti diisi dari POST
 
     public function order($data)
